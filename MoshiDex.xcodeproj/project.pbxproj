@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF79C4131877280C00FD3D0D /* AddMoshiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF79C4121877280C00FD3D0D /* AddMoshiViewController.m */; };
+		CF88539218888BEF00230424 /* face.png in Resources */ = {isa = PBXBuildFile; fileRef = CF88539118888BEF00230424 /* face.png */; };
 		CF8F3076186CF6F4007D3DB2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F3075186CF6F4007D3DB2 /* Foundation.framework */; };
 		CF8F3078186CF6F4007D3DB2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F3077186CF6F4007D3DB2 /* CoreGraphics.framework */; };
 		CF8F307A186CF6F4007D3DB2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F3079186CF6F4007D3DB2 /* UIKit.framework */; };
@@ -21,6 +23,17 @@
 		CF8F3097186CF6F4007D3DB2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F3079186CF6F4007D3DB2 /* UIKit.framework */; };
 		CF8F309F186CF6F4007D3DB2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF8F309D186CF6F4007D3DB2 /* InfoPlist.strings */; };
 		CF8F30A1186CF6F4007D3DB2 /* MoshiDexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8F30A0186CF6F4007D3DB2 /* MoshiDexTests.m */; };
+		CF8F30AB186CF76A007D3DB2 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30AA186CF76A007D3DB2 /* Parse.framework */; };
+		CF8F30B5186CF7B2007D3DB2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30AC186CF7B2007D3DB2 /* AudioToolbox.framework */; };
+		CF8F30B6186CF7B2007D3DB2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30AD186CF7B2007D3DB2 /* CFNetwork.framework */; };
+		CF8F30B7186CF7B2007D3DB2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30AE186CF7B2007D3DB2 /* CoreLocation.framework */; };
+		CF8F30B8186CF7B2007D3DB2 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30AF186CF7B2007D3DB2 /* libz.1.1.3.dylib */; };
+		CF8F30B9186CF7B2007D3DB2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30B0186CF7B2007D3DB2 /* MobileCoreServices.framework */; };
+		CF8F30BA186CF7B2007D3DB2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30B1186CF7B2007D3DB2 /* QuartzCore.framework */; };
+		CF8F30BB186CF7B2007D3DB2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30B2186CF7B2007D3DB2 /* Security.framework */; };
+		CF8F30BC186CF7B2007D3DB2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30B3186CF7B2007D3DB2 /* StoreKit.framework */; };
+		CF8F30BD186CF7B2007D3DB2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F30B4186CF7B2007D3DB2 /* SystemConfiguration.framework */; };
+		CFBACF711870E4E00052957E /* MoshiDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFBACF701870E4E00052957E /* MoshiDetailsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +47,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF79C4111877280C00FD3D0D /* AddMoshiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMoshiViewController.h; sourceTree = "<group>"; };
+		CF79C4121877280C00FD3D0D /* AddMoshiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMoshiViewController.m; sourceTree = "<group>"; };
+		CF88539118888BEF00230424 /* face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face.png; sourceTree = "<group>"; };
 		CF8F3072186CF6F4007D3DB2 /* MoshiDex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoshiDex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF8F3075186CF6F4007D3DB2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CF8F3077186CF6F4007D3DB2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,6 +69,18 @@
 		CF8F309C186CF6F4007D3DB2 /* MoshiDexTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MoshiDexTests-Info.plist"; sourceTree = "<group>"; };
 		CF8F309E186CF6F4007D3DB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CF8F30A0186CF6F4007D3DB2 /* MoshiDexTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MoshiDexTests.m; sourceTree = "<group>"; };
+		CF8F30AA186CF76A007D3DB2 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		CF8F30AC186CF7B2007D3DB2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		CF8F30AD186CF7B2007D3DB2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		CF8F30AE186CF7B2007D3DB2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CF8F30AF186CF7B2007D3DB2 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
+		CF8F30B0186CF7B2007D3DB2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		CF8F30B1186CF7B2007D3DB2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CF8F30B2186CF7B2007D3DB2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CF8F30B3186CF7B2007D3DB2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		CF8F30B4186CF7B2007D3DB2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		CFBACF6F1870E4E00052957E /* MoshiDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoshiDetailsViewController.h; sourceTree = "<group>"; };
+		CFBACF701870E4E00052957E /* MoshiDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoshiDetailsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +88,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF8F30B5186CF7B2007D3DB2 /* AudioToolbox.framework in Frameworks */,
+				CF8F30B6186CF7B2007D3DB2 /* CFNetwork.framework in Frameworks */,
+				CF8F30B7186CF7B2007D3DB2 /* CoreLocation.framework in Frameworks */,
+				CF8F30B8186CF7B2007D3DB2 /* libz.1.1.3.dylib in Frameworks */,
+				CF8F30B9186CF7B2007D3DB2 /* MobileCoreServices.framework in Frameworks */,
+				CF8F30BA186CF7B2007D3DB2 /* QuartzCore.framework in Frameworks */,
+				CF8F30BB186CF7B2007D3DB2 /* Security.framework in Frameworks */,
+				CF8F30BC186CF7B2007D3DB2 /* StoreKit.framework in Frameworks */,
+				CF8F30BD186CF7B2007D3DB2 /* SystemConfiguration.framework in Frameworks */,
 				CF8F3078186CF6F4007D3DB2 /* CoreGraphics.framework in Frameworks */,
 				CF8F307A186CF6F4007D3DB2 /* UIKit.framework in Frameworks */,
+				CF8F30AB186CF76A007D3DB2 /* Parse.framework in Frameworks */,
 				CF8F3076186CF6F4007D3DB2 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +139,16 @@
 		CF8F3074186CF6F4007D3DB2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CF8F30AC186CF7B2007D3DB2 /* AudioToolbox.framework */,
+				CF8F30AD186CF7B2007D3DB2 /* CFNetwork.framework */,
+				CF8F30AE186CF7B2007D3DB2 /* CoreLocation.framework */,
+				CF8F30AF186CF7B2007D3DB2 /* libz.1.1.3.dylib */,
+				CF8F30B0186CF7B2007D3DB2 /* MobileCoreServices.framework */,
+				CF8F30B1186CF7B2007D3DB2 /* QuartzCore.framework */,
+				CF8F30B2186CF7B2007D3DB2 /* Security.framework */,
+				CF8F30B3186CF7B2007D3DB2 /* StoreKit.framework */,
+				CF8F30B4186CF7B2007D3DB2 /* SystemConfiguration.framework */,
+				CF8F30AA186CF76A007D3DB2 /* Parse.framework */,
 				CF8F3075186CF6F4007D3DB2 /* Foundation.framework */,
 				CF8F3077186CF6F4007D3DB2 /* CoreGraphics.framework */,
 				CF8F3079186CF6F4007D3DB2 /* UIKit.framework */,
@@ -117,6 +165,10 @@
 				CF8F3087186CF6F4007D3DB2 /* Main.storyboard */,
 				CF8F308A186CF6F4007D3DB2 /* ViewController.h */,
 				CF8F308B186CF6F4007D3DB2 /* ViewController.m */,
+				CFBACF6F1870E4E00052957E /* MoshiDetailsViewController.h */,
+				CFBACF701870E4E00052957E /* MoshiDetailsViewController.m */,
+				CF79C4111877280C00FD3D0D /* AddMoshiViewController.h */,
+				CF79C4121877280C00FD3D0D /* AddMoshiViewController.m */,
 				CF8F308D186CF6F4007D3DB2 /* Images.xcassets */,
 				CF8F307C186CF6F4007D3DB2 /* Supporting Files */,
 			);
@@ -130,6 +182,7 @@
 				CF8F307E186CF6F4007D3DB2 /* InfoPlist.strings */,
 				CF8F3081186CF6F4007D3DB2 /* main.m */,
 				CF8F3083186CF6F4007D3DB2 /* MoshiDex-Prefix.pch */,
+				CF88539118888BEF00230424 /* face.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -230,6 +283,7 @@
 			files = (
 				CF8F308E186CF6F4007D3DB2 /* Images.xcassets in Resources */,
 				CF8F3080186CF6F4007D3DB2 /* InfoPlist.strings in Resources */,
+				CF88539218888BEF00230424 /* face.png in Resources */,
 				CF8F3089186CF6F4007D3DB2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,7 +303,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFBACF711870E4E00052957E /* MoshiDetailsViewController.m in Sources */,
 				CF8F308C186CF6F4007D3DB2 /* ViewController.m in Sources */,
+				CF79C4131877280C00FD3D0D /* AddMoshiViewController.m in Sources */,
 				CF8F3086186CF6F4007D3DB2 /* AppDelegate.m in Sources */,
 				CF8F3082186CF6F4007D3DB2 /* main.m in Sources */,
 			);
@@ -378,6 +434,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/yanivkerem/Desktop/MoshiDex-2",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MoshiDex/MoshiDex-Prefix.pch";
 				INFOPLIST_FILE = "MoshiDex/MoshiDex-Info.plist";
@@ -391,6 +451,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/yanivkerem/Desktop/MoshiDex-2",
+				);
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = (
+					"$(inherited)",
+					"/Users/yanivkerem/Desktop/MoshiDex-2",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MoshiDex/MoshiDex-Prefix.pch";
 				INFOPLIST_FILE = "MoshiDex/MoshiDex-Info.plist";
@@ -460,6 +528,7 @@
 				CF8F30A6186CF6F4007D3DB2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF8F30A7186CF6F4007D3DB2 /* Build configuration list for PBXNativeTarget "MoshiDexTests" */ = {
 			isa = XCConfigurationList;
@@ -468,6 +537,7 @@
 				CF8F30A9186CF6F4007D3DB2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

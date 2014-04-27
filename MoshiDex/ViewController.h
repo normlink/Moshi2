@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic) BOOL moshiReady;
+@property (nonatomic) int indexSelected;
 
 @end
