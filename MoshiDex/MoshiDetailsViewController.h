@@ -18,6 +18,6 @@
 @property (strong, nonatomic) NSString *locationIncoming;
 @property (strong, nonatomic) NSString *rarityIncoming;
 @property (strong, nonatomic) NSString *descriptionIncoming;
-@property (strong, nonatomic) UIImageView *imageIncoming;
+@property (strong, nonatomic) UIImage *imageIncoming;
 
 @end

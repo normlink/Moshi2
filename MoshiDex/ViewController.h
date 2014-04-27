@@ -11,6 +11,6 @@
 @interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) BOOL moshiReady;
-@property (nonatomic) int indexSelected;
+@property (nonatomic) NSInteger indexSelected;
 
 @end
