@@ -53,9 +53,24 @@
                             <constraint firstItem="r9s-XF-1im" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="zr8-uh-Hk8"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="MoshiDex" id="4X3-6q-dao"/>
+                    <navigationItem key="navigationItem" title="MoshiDex" id="4X3-6q-dao">
+                        <barButtonItem key="leftBarButtonItem" id="Efo-Hc-RCm">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="uZx-6f-fIr">
+                                <rect key="frame" x="16" y="7" width="71" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="ABC"/>
+                                    <segment title="123"/>
+                                </segments>
+                                <connections>
+                                    <action selector="sortSelection:" destination="vXZ-lx-hvc" eventType="valueChanged" id="Kn2-su-Q5j"/>
+                                </connections>
+                            </segmentedControl>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="moshiTableView" destination="r9s-XF-1im" id="iR5-Um-RE0"/>
+                        <outlet property="segmentController" destination="uZx-6f-fIr" id="zxv-cr-8m6"/>
                         <segue destination="EhY-Sg-dX6" kind="push" identifier="addMoshi" id="LAl-Nd-aZi"/>
                         <segue destination="TRk-7e-6tg" kind="push" identifier="viewMoshi" id="zwP-9X-Wfh"/>
                     </connections>
@@ -212,13 +227,24 @@
                                     <action selector="selectPhoto:" destination="EhY-Sg-dX6" eventType="touchUpInside" id="omu-qa-CP2"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Add Moshi Description" translatesAutoresizingMaskIntoConstraints="NO" id="iTE-rf-i13">
-                                <rect key="frame" x="20" y="184" width="280" height="60"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iTE-rf-i13">
+                                <rect key="frame" x="20" y="213" width="280" height="117"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" cyan="0.058251596715328466" magenta="0.0" yellow="0.0" black="0.0" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6w-xC-Eos">
+                                <rect key="frame" x="20" y="184" width="128" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cet-qn-FHY">
+                                <rect key="frame" x="20" y="346" width="280" height="202"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -229,6 +255,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="imageView" destination="Cet-qn-FHY" id="O0X-ih-AGD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="95w-Au-uah" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

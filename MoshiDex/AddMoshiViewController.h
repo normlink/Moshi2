@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddMoshiViewController : UIViewController <UIImagePickerControllerDelegate>
+@interface AddMoshiViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @end

@@ -11,6 +11,8 @@
 
 @interface AddMoshiViewController () {
     UIImagePickerController *myPicker;
+    __weak IBOutlet UIImageView *imageView;
+    UIImage *chosenImage;
 }
 
 - (IBAction)submitMoshi:(id)sender;
@@ -50,6 +52,19 @@
 
 - (IBAction)selectPhoto:(id)sender {
     [self presentViewController:myPicker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    chosenImage = info[UIImagePickerControllerEditedImage];
+    imageView.image = chosenImage;
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+
 }
 
 @end
