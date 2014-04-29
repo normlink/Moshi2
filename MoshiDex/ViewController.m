@@ -113,6 +113,7 @@
 }
 -(void)getParse{
     PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
+    [query setLimit:1000];
     if (segmentController.selectedSegmentIndex == 1) {
         [query orderByAscending:@"MoshiNumber"];
     }else{
@@ -216,9 +217,11 @@
     return cell;
 }
 
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([segue.identifier isEqualToString:@"viewMoshi"]) {
-//        MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"viewMoshi"]) {
+        MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+}}
 //        detailsVC.nameIncoming = [moshiNameArray objectAtIndex:_indexSelected];
 //        detailsVC.numberIncoming = [moshiNumberArray objectAtIndex:_indexSelected];
 //        detailsVC.seriesIncoming = [moshiSeries objectAtIndex:_indexSelected];
