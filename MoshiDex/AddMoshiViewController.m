@@ -13,6 +13,15 @@
     UIImagePickerController *myPicker;
     __weak IBOutlet UIImageView *imageView;
     UIImage *chosenImage;
+    __weak IBOutlet UITextField *nameText;
+    __weak IBOutlet UITextField *numberText;
+    __weak IBOutlet UITextField *seriesText;
+    __weak IBOutlet UITextField *typeText;
+    __weak IBOutlet UITextField *speciesText;
+    __weak IBOutlet UITextField *rarityText;
+    __weak IBOutlet UITextField *locationText;
+    __weak IBOutlet UITextView *descriptionText;
+    __weak IBOutlet UIBarButtonItem *submitButton;
 }
 
 - (IBAction)submitMoshi:(id)sender;
@@ -32,22 +41,52 @@
 }
 
 - (IBAction)submitMoshi:(id)sender {
-    PFObject *object = [PFObject objectWithClassName:@"MoshiData"];
-    object[@"MoshiApproved"] = @NO;
-    object[@"MoshiName"] = @"Test";
-    object[@"MoshiNumber"] =@2;
-    object[@"MoshiSeries"] = @4;
-    object[@"MoshiSpecies"] = @"ek";
-//    object[@"MoshiPicture"] = [UIImage imageNamed:@"face.png"];
-    object[@"MoshiType"] = @"test";
-    object[@"MoshiLocation"] = @"test";
-    object[@"MoshiRare"] = @"test";
-    object[@"MoshiDescription"] = @"test";
-    //    gameScore[@"score"] = @1337;
-    //    gameScore[@"playerName"] = @"Sean Plott";
-    //    gameScore[@"cheatMode"] = @NO;
-    //    [gameScore saveEventually];
-//    [object saveInBackground];
+//        to delete entire object(row)
+//        PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
+//    
+//        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//            if (!error) {
+//               NSMutableArray* moshiArray = [[NSMutableArray alloc] initWithArray:objects];
+//    
+//                for (PFObject* obj in moshiArray) {
+//    
+//    
+//                            if ([obj[@"MoshiName"]   isEqualToString:@"" ]) {
+//                                [obj deleteInBackground];
+//                            }}}
+    ////                        NSLog(@"%lu, %lu %@",(unsigned long)moshiArray.count,(unsigned long)imageArray.count ,[obj objectForKey:@"MoshiNumber"]);
+    //
+    //            }}
+//               }];
+    
+    if (([nameText.text isEqualToString:@""]) || (imageView.image == nil))   {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You must add both a picture and Moshling name to Submit" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
+        [alert show];
+    } else {
+       
+        PFObject *mobject = [PFObject objectWithClassName:@"MoshiData"];
+        
+        mobject[@"MoshiApproved"] = @NO;
+        mobject[@"MoshiName"] = nameText.text;
+        mobject[@"MoshiNumber"] = @([numberText.text intValue]);
+        mobject[@"MoshiSeries"] = @([seriesText.text intValue]);
+        mobject[@"MoshiSpecies"] = speciesText.text;
+        mobject[@"MoshiType"] = typeText.text;
+        mobject[@"MoshiLocation"] = locationText.text;
+        mobject[@"MoshiRare"] = rarityText.text;
+        mobject[@"MoshiDescription"] = descriptionText.text;
+        
+        NSData *photo = UIImagePNGRepresentation(chosenImage);
+        PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
+        [mobject setObject:imageFile forKey:@"MoshiPicture"];
+        
+        [mobject saveInBackground];
+        
+                [self.navigationController popViewControllerAnimated:YES];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Submission Successful!" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
+        [alert show];
+
+    }
 }
 
 - (IBAction)selectPhoto:(id)sender {
@@ -64,7 +103,7 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
-
+    
 }
 
 @end

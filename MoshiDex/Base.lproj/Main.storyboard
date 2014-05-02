@@ -249,14 +249,23 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="ZsX-pj-Nes">
-                        <barButtonItem key="rightBarButtonItem" title="Submit" id="UP6-9H-ClO">
+                        <barButtonItem key="rightBarButtonItem" title="Submit for Approval" id="UP6-9H-ClO">
                             <connections>
                                 <action selector="submitMoshi:" destination="EhY-Sg-dX6" id="vVe-Ss-vzh"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="descriptionText" destination="iTE-rf-i13" id="ODz-4v-Wpx"/>
                         <outlet property="imageView" destination="Cet-qn-FHY" id="O0X-ih-AGD"/>
+                        <outlet property="locationText" destination="99a-0f-4u6" id="INT-BP-jAl"/>
+                        <outlet property="nameText" destination="Iht-1a-ubk" id="RiA-SC-bjg"/>
+                        <outlet property="numberText" destination="rHc-hg-0CD" id="Rza-Uo-SmN"/>
+                        <outlet property="rarityText" destination="SMf-4a-x50" id="jpM-wV-gdx"/>
+                        <outlet property="seriesText" destination="fI4-Bx-aHn" id="PeW-d4-7FF"/>
+                        <outlet property="speciesText" destination="Xkj-sf-8lI" id="77y-GC-PsC"/>
+                        <outlet property="submitButton" destination="UP6-9H-ClO" id="sNo-gw-HkT"/>
+                        <outlet property="typeText" destination="nA3-c6-J1T" id="H47-ra-N67"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="95w-Au-uah" userLabel="First Responder" sceneMemberID="firstResponder"/>

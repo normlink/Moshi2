@@ -44,40 +44,40 @@
 {
     [super viewDidLoad];
     
-    [self doParseQuery];
+    [self getPicDoText];
 }
 
--(void) doParseQuery{
-    PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
-    [query getObjectInBackgroundWithId:detailInfo.objectId block:^(PFObject *object, NSError *error) {
-        
-    //    [query whereKey:@"MoshiName" equalTo:[detailInfo objectForKey:@"MoshiName"]];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-//            for (PFObject *object in objects) {
-    
-                PFFile* pic =[object objectForKey:@"MoshiPicture"];
+-(void) getPicDoText{
+//    PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
+//    [query getObjectInBackgroundWithId:detailInfo.objectId block:^(PFObject *object, NSError *error) {
+//        
+//    //    [query whereKey:@"MoshiName" equalTo:[detailInfo objectForKey:@"MoshiName"]];
+////    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//        if (!error) {
+////            for (PFObject *object in objects) {
+//    
+                PFFile* pic =[detailInfo objectForKey:@"MoshiPicture"];
                 [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                     if (!error) {
                         avatar.image = [UIImage imageWithData:data];
                     }
                 }];
-                
-                self.title = object[@"MoshiName"];
-                number.text = [NSString stringWithFormat:@"Number:  %@", object[@"MoshiNumber"]];
-                series.text = [NSString stringWithFormat:@"Series:  %@", object[@"MoshiSeries"]];
-                species.text = [NSString stringWithFormat:@"Species:  %@", object[@"MoshiSpecies"]];
-                type.text = [NSString stringWithFormat:@"Type:  %@", object[@"MoshiType"]];
-                location.text = [NSString stringWithFormat:@"Location:  %@", object[@"MoshiLocation"]];
-                rarity.text = [NSString stringWithFormat:@"Rarity:  %@", object[@"MoshiRare"]];
-                description.text = object[@"MoshiDescription"];
-                
-//            }
-        } else {
-            NSString *errorString = [[error userInfo] objectForKey:@"error"];
-            NSLog(@"Error: %@", errorString);
-        }
-    }];
+    
+                self.title = detailInfo[@"MoshiName"];
+                number.text = [NSString stringWithFormat:@"Number:  %@", detailInfo[@"MoshiNumber"]];
+                series.text = [NSString stringWithFormat:@"Series:  %@", detailInfo[@"MoshiSeries"]];
+                species.text = [NSString stringWithFormat:@"Species:  %@", detailInfo[@"MoshiSpecies"]];
+                type.text = [NSString stringWithFormat:@"Type:  %@", detailInfo[@"MoshiType"]];
+                location.text = [NSString stringWithFormat:@"Location:  %@", detailInfo[@"MoshiLocation"]];
+                rarity.text = [NSString stringWithFormat:@"Rarity:  %@", detailInfo[@"MoshiRare"]];
+                description.text = detailInfo[@"MoshiDescription"];
+//
+////            }
+//        } else {
+//            NSString *errorString = [[error userInfo] objectForKey:@"error"];
+//            NSLog(@"Error: %@", errorString);
+//        }
+//    }];
 }
 
 @end

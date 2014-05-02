@@ -44,72 +44,37 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.simpleanywhere.com/moshidex/moshiapi.json"]];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
     
-//        NSArray *tempArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    _moshiReady = NO;
     
-//        moshiRetrievalArray = [[NSArray alloc] initWithArray:tempArray];
     
-        _moshiReady = NO;
-        
-//        moshiNameArray = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiNumberArray = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiSeries = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiSpecies = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiType = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiLocation = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiRarity = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiDescription = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
-//        moshiPicArray = [[NSMutableArray alloc] initWithCapacity:moshiRetrievalArray.count];
+    loadingView = [[UIView alloc] initWithFrame:CGRectMake(85, 150, 150, 150)];
+    loadingView.backgroundColor = [UIColor blackColor];
+    [loadingView setAlpha:0.8];
+    loadingView.layer.cornerRadius = 25;
+    [loadingView.layer setMasksToBounds:YES];
+    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 50, 100, 100)];
+    loadingLabel.text = @"Loading";
+    loadingLabel.font = [UIFont systemFontOfSize:18];
+    loadingLabel.textColor = [UIColor whiteColor];
+    loadingLabel.textAlignment = NSTextAlignmentCenter;
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.frame = CGRectMake(75, 60, 0, 0);
     
-        loadingView = [[UIView alloc] initWithFrame:CGRectMake(85, 150, 150, 150)];
-        loadingView.backgroundColor = [UIColor blackColor];
-        [loadingView setAlpha:0.8];
-        loadingView.layer.cornerRadius = 25;
-        [loadingView.layer setMasksToBounds:YES];
-        UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 50, 100, 100)];
-        loadingLabel.text = @"Loading";
-        loadingLabel.font = [UIFont systemFontOfSize:18];
-        loadingLabel.textColor = [UIColor whiteColor];
-        loadingLabel.textAlignment = NSTextAlignmentCenter;
-        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        activityIndicator.frame = CGRectMake(75, 60, 0, 0);
-        
-        [loadingView addSubview:loadingLabel];
-        [loadingView addSubview:activityIndicator];
-        [self.view addSubview:loadingView];
-        [self.view bringSubviewToFront:loadingView];
-        
-        [self startLoading];
+    [loadingView addSubview:loadingLabel];
+    [loadingView addSubview:activityIndicator];
+    [self.view addSubview:loadingView];
+    [self.view bringSubviewToFront:loadingView];
     
-        [self getParse];
+    [self startLoading];
     
-//        for (int count = 0; count < moshiRetrievalArray.count; count++) {
-//            PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
-//            [query getObjectInBackgroundWithId:[NSString stringWithFormat:@"%@", [moshiRetrievalArray objectAtIndex:count]] block:^(PFObject *moshiData, NSError *error) {
-//                [moshiNameArray addObject:[moshiData objectForKey:@"MoshiName"]];
-//                [moshiNumberArray addObject:[moshiData objectForKey:@"MoshiNumber"]];
-//                [moshiSeries addObject:[moshiData objectForKey:@"MoshiSeries"]];
-//                [moshiSpecies addObject:[moshiData objectForKey:@"MoshiSpecies"]];
-//                [moshiType addObject:[moshiData objectForKey:@"MoshiType"]];
-//                [moshiLocation addObject:[moshiData objectForKey:@"MoshiLocation"]];
-//                [moshiRarity addObject:[moshiData objectForKey:@"MoshiRare"]];
-//                [moshiDescription addObject:[moshiData objectForKey:@"MoshiDescription"]];
-//                if (!error) {
-//                    PFFile *imageFile = [moshiData objectForKey:@"MoshiPicture"];
-//                    [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//                        if (!error) {
-//                            UIImage *image = [UIImage imageWithData:data];
-//                            [moshiPicArray addObject:image];
-//                        }
-//                    }];
-//                }
-//            }];
-//        }
-        [moshiTableView reloadData];
-//    }];
+    [self getParse];
+    
+//    [moshiTableView reloadData];
+}
+//use viewWillAppear to refresh on return to view. Did not implement as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). 
+-(void)viewWillAppear:(BOOL)animated{
+//    [self getParse];
 }
 -(void)getParse{
     PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
@@ -122,26 +87,15 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             moshiArray = [[NSMutableArray alloc] initWithArray:objects];
-            imageArray = [[NSMutableArray alloc] initWithCapacity:[moshiArray count]];
-                for (PFObject* obj in moshiArray) {
-                    PFFile *pic = (PFFile*)[obj objectForKey:@"MoshiPicture"];
-                    [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                        if (!error) {
-                    UIImage *image = [UIImage imageWithData:data];
-                    [imageArray addObject:image];
-                            NSLog(@"%lu, %lu %@",(unsigned long)moshiArray.count,(unsigned long)imageArray.count ,[obj objectForKey:@"MoshiNumber"]);
-                        }
-                    }];
-                }
-           
+                                     NSLog(@"arraycount %lu",(unsigned long)moshiArray.count );
         }
         [self reloadData];
     }];
-
+    
 }
 
 - (void)reloadData {
-    if (imageArray.count == moshiArray.count) {
+    if (/*imageArray.count == */ moshiArray.count) {
         [moshiTableView reloadData];
         _moshiReady = YES;
         [self stopLoading];
@@ -168,21 +122,19 @@
 }
 - (IBAction)sortSelection:(id)sender {
     [self getParse];
-//    if (segmentController.selectedSegmentIndex == 0) {
-//         NSLog(@"yes");
     
-        switch (((UISegmentedControl *) sender).selectedSegmentIndex){
-            case 0:
-                 NSLog(@"yes");
-                break;
-            case 1:
-              NSLog(@"no");
-                break;
-            default:
-                break;
-                
+    switch (((UISegmentedControl *) sender).selectedSegmentIndex){
+        case 0:
+            NSLog(@"yes");
+            break;
+        case 1:
+            NSLog(@"no");
+            break;
+        default:
+            break;
+            
     }
-
+    
 }
 
 #pragma mark UITableView Delegate
@@ -200,16 +152,23 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cellIdentifer"];
     }
-    if (moshiArray.count > 1) {
-//        cell.textLabel.text = [NSString stringWithFormat:@"%@", [moshiNameArray objectAtIndex:indexPath.row]];
-//        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [moshiNumberArray objectAtIndex:indexPath.row]];
-//        cell.imageView.image = [moshiPicArray objectAtIndex:indexPath.row];
+    if (moshiArray.count ) {
         
         PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
         
-        cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
-        cell.imageView.image = [imageArray objectAtIndex:indexPath.row];
+        
+        PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+        [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            if (!error) {
+                
+                UIImage *picture = [UIImage imageWithData:data];
+                
+                cell.imageView.image = picture;
+                cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
+
+            }
+        }];
     } else {
         cell.textLabel.text = @"Loading...";
     }
@@ -220,19 +179,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"viewMoshi"]) {
         MoshiDetailsViewController *detailsVC = segue.destinationViewController;
-            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
-}}
-//        detailsVC.nameIncoming = [moshiNameArray objectAtIndex:_indexSelected];
-//        detailsVC.numberIncoming = [moshiNumberArray objectAtIndex:_indexSelected];
-//        detailsVC.seriesIncoming = [moshiSeries objectAtIndex:_indexSelected];
-//        detailsVC.speciesIncoming = [moshiSpecies objectAtIndex:_indexSelected];
-//        detailsVC.typeIncoming = [moshiType objectAtIndex:_indexSelected];
-//        detailsVC.locationIncoming = [moshiLocation objectAtIndex:_indexSelected];
-//        detailsVC.rarityIncoming = [moshiRarity objectAtIndex:_indexSelected];
-//        detailsVC.descriptionIncoming = [moshiDescription objectAtIndex:_indexSelected];
-//        detailsVC.imageIncoming = [moshiPicArray objectAtIndex:_indexSelected];
-//    }
-//}
+        detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+    }}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
