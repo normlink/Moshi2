@@ -12,22 +12,12 @@
 
 @interface ViewController () {
     
-    NSArray *moshiRetrievalArray;
-    
     UIView *loadingView;
     UIActivityIndicatorView *activityIndicator;
-    NSMutableArray *moshiNameArray;
-    NSMutableArray *moshiNumberArray;
-    NSMutableArray *moshiSeries;
-    NSMutableArray *moshiSpecies;
-    NSMutableArray *moshiType;
-    NSMutableArray *moshiLocation;
-    NSMutableArray *moshiRarity;
-    NSMutableArray *moshiDescription;
-    NSMutableArray *moshiPicArray;
     
     NSMutableArray *moshiArray;
-    NSMutableArray *imageArray;
+    BOOL editMode;
+    //    NSMutableArray *imageArray;
     __weak IBOutlet UISegmentedControl *segmentController;
     __weak IBOutlet UITableView *moshiTableView;
 }
@@ -44,7 +34,7 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-    
+    editMode = YES;
     _moshiReady = NO;
     
     
@@ -70,24 +60,34 @@
     
     [self getParse];
     
-//    [moshiTableView reloadData];
+    //    [moshiTableView reloadData];
 }
-//use viewWillAppear to refresh on return to view. Did not implement as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). 
+//use viewWillAppear to refresh on return to view. Did not implement as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds).
 -(void)viewWillAppear:(BOOL)animated{
-//    [self getParse];
+    //    [self getParse];
 }
 -(void)getParse{
     PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
     [query setLimit:1000];
-    if (segmentController.selectedSegmentIndex == 1) {
-        [query orderByAscending:@"MoshiNumber"];
-    }else{
-        [query orderByAscending:@"MoshiName"];
+    
+    if (editMode == YES) {
+        if (segmentController.selectedSegmentIndex == 1) {
+            [query orderByDescending:@"MoshiApproved,MoshiNumber"];
+        }else{
+            [query orderByDescending:@"MoshiApproved,MoshiName"];
+        }
+    } else {
+        [query whereKey:@"MoshiApproved" equalTo:@YES];
+        if (segmentController.selectedSegmentIndex == 1) {
+            [query orderByAscending:@"MoshiNumber"];
+        }else{
+            [query orderByAscending:@"MoshiName"];
+        }
     }
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             moshiArray = [[NSMutableArray alloc] initWithArray:objects];
-                                     NSLog(@"arraycount %lu",(unsigned long)moshiArray.count );
+            NSLog(@"arraycount %lu",(unsigned long)moshiArray.count );
         }
         [self reloadData];
     }];
@@ -149,8 +149,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellIdentifier"];
     
+    
+    
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cellIdentifer"];
+        
     }
     if (moshiArray.count ) {
         
@@ -164,14 +167,29 @@
                 UIImage *picture = [UIImage imageWithData:data];
                 
                 cell.imageView.image = picture;
+                
+                //to same-size cell pics (pics may be distorted with this method)
+                CGSize itemSize = CGSizeMake(50, 40);
+                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+                [cell.imageView.image drawInRect:imageRect];
+                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                
+                
                 cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
+                if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
+                    [cell.textLabel setHighlighted:YES];
+                    [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
+                }
 
             }
         }];
     } else {
         cell.textLabel.text = @"Loading...";
     }
+    
     
     return cell;
 }
@@ -190,5 +208,6 @@
         [self performSegueWithIdentifier:@"viewMoshi" sender:self];
     }
 }
+
 
 @end
