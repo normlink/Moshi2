@@ -22,17 +22,29 @@
     __weak IBOutlet UITextField *locationText;
     __weak IBOutlet UITextView *descriptionText;
     __weak IBOutlet UIBarButtonItem *submitButton;
+    __weak IBOutlet UITextField *passwordText;
+    __weak IBOutlet UIButton *adminButton;
+    
 }
 
 - (IBAction)submitMoshi:(id)sender;
 - (IBAction)selectPhoto:(id)sender;
+- (IBAction)enterAdmin:(id)sender;
 
 @end
 
 @implementation AddMoshiViewController
 
+@synthesize adminButtonVar;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (adminButtonVar == YES) {
+        [adminButton setTitle:@"Exit Admin" forState:UIControlStateNormal];
+        [adminButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    }
+    
     myPicker = [[UIImagePickerController alloc]init];
     myPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     myPicker.allowsEditing = YES;
@@ -84,6 +96,7 @@
         
         //                [self.navigationController popViewControllerAnimated:YES];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Submission Successful!" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
+        alert.tag = 1;
         [alert show];
         
     }
@@ -91,12 +104,37 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
+        if (alertView.tag == 1) {
         [self.navigationController popViewControllerAnimated:YES];
+    }
     }
 }
 
 - (IBAction)selectPhoto:(id)sender {
     [self presentViewController:myPicker animated:YES completion:nil];
+}
+
+- (IBAction)enterAdmin:(id)sender {
+    if ([adminButton.titleLabel.text isEqualToString:@"Exit Admin"]) {
+        [self.enterAdminDelegate changeAdminVar:NO];
+        [adminButton setTitle:@"Admin only" forState:UIControlStateNormal];
+        [adminButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        if ([passwordText.text isEqualToString:@""]) {
+            return;
+        }
+        if ([passwordText.text isEqualToString:@"moshithekid"]) {
+            [self.enterAdminDelegate changeAdminVar:YES];
+            [adminButton setTitle:@"Exit Admin" forState:UIControlStateNormal];
+            [adminButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Administrator Use Only" message:@"Please enter correct password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
+            alert.tag = 2;
+            [alert show];
+        }
+    }
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {

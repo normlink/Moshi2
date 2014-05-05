@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol AddMoshiDelegate;
+
 @interface AddMoshiViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
+@property (weak, nonatomic) id <AddMoshiDelegate> enterAdminDelegate;
+@property (nonatomic) BOOL adminButtonVar;
+
+@end
+
+@protocol AddMoshiDelegate <NSObject>
+
+-(void)changeAdminVar:(BOOL)var;
+
 
 @end

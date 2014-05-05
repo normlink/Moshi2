@@ -28,13 +28,17 @@
 
 @implementation ViewController
 
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-    editMode = YES;
+//    editMode = YES;
     _moshiReady = NO;
     
     
@@ -62,9 +66,27 @@
     
     //    [moshiTableView reloadData];
 }
-//use viewWillAppear to refresh on return to view. Did not implement as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds).
+
+#pragma mark AddMoshiDelegate
+-(void)changeAdminVar:(BOOL)var {
+    editMode = var;
+    if (editMode == YES) {
+        self.title = @"Admin";
+        self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor redColor] forKey:NSForegroundColorAttributeName];
+    }else{
+        self.title = @"MoshiDex";
+        self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:NSForegroundColorAttributeName];
+ 
+    }
+    
+    NSLog(@"%hhd",editMode);
+}
+
+
+
+//use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently implemented to facilitate initial admin mode sort.
 -(void)viewWillAppear:(BOOL)animated{
-    //    [self getParse];
+        [self getParse];
 }
 -(void)getParse{
     PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
@@ -72,9 +94,9 @@
     
     if (editMode == YES) {
         if (segmentController.selectedSegmentIndex == 1) {
-            [query orderByDescending:@"MoshiApproved,MoshiNumber"];
+            [query orderByAscending:@"MoshiApproved,MoshiNumber"];
         }else{
-            [query orderByDescending:@"MoshiApproved,MoshiName"];
+            [query orderByAscending:@"MoshiApproved,MoshiName"];
         }
     } else {
         [query whereKey:@"MoshiApproved" equalTo:@YES];
@@ -198,7 +220,13 @@
     if ([segue.identifier isEqualToString:@"viewMoshi"]) {
         MoshiDetailsViewController *detailsVC = segue.destinationViewController;
         detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
-    }}
+    }
+    if ([segue.identifier isEqualToString:@"addMoshi"]) {
+        AddMoshiViewController *addVC = segue.destinationViewController;
+        addVC.enterAdminDelegate = self;
+        addVC.adminButtonVar = editMode;
+    }
+}
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

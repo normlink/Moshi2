@@ -11,15 +11,6 @@
 
 @interface MoshiDetailsViewController : UIViewController
 
-//@property (strong, nonatomic) NSString *nameIncoming;
-//@property (strong, nonatomic) NSString *numberIncoming;
-//@property (strong, nonatomic) NSString *seriesIncoming;
-//@property (strong, nonatomic) NSString *speciesIncoming;
-//@property (strong, nonatomic) NSString *typeIncoming;
-//@property (strong, nonatomic) NSString *locationIncoming;
-//@property (strong, nonatomic) NSString *rarityIncoming;
-//@property (strong, nonatomic) NSString *descriptionIncoming;
-//@property (strong, nonatomic) UIImage *imageIncoming;
 
 @property (strong, nonatomic) PFObject * detailInfo;
 

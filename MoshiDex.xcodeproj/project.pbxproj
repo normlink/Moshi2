@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		61F625EF191755040074D3D9 /* AdminViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F625EE191755040074D3D9 /* AdminViewController.m */; };
 		CF79C4131877280C00FD3D0D /* AddMoshiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF79C4121877280C00FD3D0D /* AddMoshiViewController.m */; };
 		CF88539218888BEF00230424 /* face.png in Resources */ = {isa = PBXBuildFile; fileRef = CF88539118888BEF00230424 /* face.png */; };
 		CF8F3076186CF6F4007D3DB2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8F3075186CF6F4007D3DB2 /* Foundation.framework */; };
@@ -47,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		61F625ED191755040074D3D9 /* AdminViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdminViewController.h; path = ../AdminViewController.h; sourceTree = "<group>"; };
+		61F625EE191755040074D3D9 /* AdminViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AdminViewController.m; path = ../AdminViewController.m; sourceTree = "<group>"; };
 		CF79C4111877280C00FD3D0D /* AddMoshiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMoshiViewController.h; sourceTree = "<group>"; };
 		CF79C4121877280C00FD3D0D /* AddMoshiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMoshiViewController.m; sourceTree = "<group>"; };
 		CF88539118888BEF00230424 /* face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face.png; sourceTree = "<group>"; };
@@ -169,6 +172,8 @@
 				CFBACF701870E4E00052957E /* MoshiDetailsViewController.m */,
 				CF79C4111877280C00FD3D0D /* AddMoshiViewController.h */,
 				CF79C4121877280C00FD3D0D /* AddMoshiViewController.m */,
+				61F625ED191755040074D3D9 /* AdminViewController.h */,
+				61F625EE191755040074D3D9 /* AdminViewController.m */,
 				CF8F308D186CF6F4007D3DB2 /* Images.xcassets */,
 				CF8F307C186CF6F4007D3DB2 /* Supporting Files */,
 			);
@@ -303,6 +308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61F625EF191755040074D3D9 /* AdminViewController.m in Sources */,
 				CFBACF711870E4E00052957E /* MoshiDetailsViewController.m in Sources */,
 				CF8F308C186CF6F4007D3DB2 /* ViewController.m in Sources */,
 				CF79C4131877280C00FD3D0D /* AddMoshiViewController.m in Sources */,

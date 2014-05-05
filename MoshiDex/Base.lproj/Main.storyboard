@@ -263,6 +263,9 @@
                                     <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="enterAdmin:" destination="EhY-Sg-dX6" eventType="touchUpInside" id="7fq-uE-Pv4"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -275,11 +278,13 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="adminButton" destination="6Eq-mj-52g" id="8ZR-ar-28S"/>
                         <outlet property="descriptionText" destination="iTE-rf-i13" id="ODz-4v-Wpx"/>
                         <outlet property="imageView" destination="Cet-qn-FHY" id="O0X-ih-AGD"/>
                         <outlet property="locationText" destination="99a-0f-4u6" id="INT-BP-jAl"/>
                         <outlet property="nameText" destination="Iht-1a-ubk" id="RiA-SC-bjg"/>
                         <outlet property="numberText" destination="rHc-hg-0CD" id="Rza-Uo-SmN"/>
+                        <outlet property="passwordText" destination="XVo-Ob-Tzu" id="mfw-Wk-eYl"/>
                         <outlet property="rarityText" destination="SMf-4a-x50" id="jpM-wV-gdx"/>
                         <outlet property="seriesText" destination="fI4-Bx-aHn" id="PeW-d4-7FF"/>
                         <outlet property="speciesText" destination="Xkj-sf-8lI" id="77y-GC-PsC"/>

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AddMoshiViewController.h"
 
-@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,AddMoshiDelegate>
 
 @property (nonatomic) BOOL moshiReady;
 @property (nonatomic) NSInteger indexSelected;
