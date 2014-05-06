@@ -8,42 +8,139 @@
 
 #import "AdminViewController.h"
 
-@interface AdminViewController ()
+@interface AdminViewController (){
+    
+        UIImagePickerController *myPicker;
+    __weak IBOutlet UITextField *nameText;
+    __weak IBOutlet UITextField *numberText;
+    __weak IBOutlet UITextField *seriesText;
+    __weak IBOutlet UITextField *typeText;
+    __weak IBOutlet UITextField *speciesText;
+    __weak IBOutlet UITextField *rarityText;
+    __weak IBOutlet UITextField *locationText;
+    __weak IBOutlet UITextView *descriptionText;
+    __weak IBOutlet UIImageView *imageView;
+    __weak IBOutlet UILabel *approvedText;
+    UIImage *chosenImage;
+}
+- (IBAction)editApprove:(id)sender;
+- (IBAction)selectPhoto:(id)sender;
+- (IBAction)deleteMoshling:(id)sender;
 
 @end
 
 @implementation AdminViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize detailInfo;
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    myPicker = [[UIImagePickerController alloc]init];
+    myPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    myPicker.allowsEditing = YES;
+    myPicker.delegate = self;
+
+    [self getPicDoText];
 }
 
+-(void) getPicDoText{
+
+    PFFile* pic =[detailInfo objectForKey:@"MoshiPicture"];
+    [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        if (!error) {
+            imageView.image = [UIImage imageWithData:data];
+            chosenImage = imageView.image;
+        }
+    }];
+    
+    nameText.text = detailInfo[@"MoshiName"];
+    numberText.text = [NSString stringWithFormat:@"%@",detailInfo[@"MoshiNumber"]];
+    seriesText.text = [NSString stringWithFormat:@"%@",detailInfo[@"MoshiSeries"]];
+    speciesText.text = detailInfo[@"MoshiSpecies"];
+    typeText.text = detailInfo[@"MoshiType"];
+    locationText.text = detailInfo[@"MoshiLocation"];
+    rarityText.text = detailInfo[@"MoshiRare"];
+    descriptionText.text = detailInfo[@"MoshiDescription"];
+    if ([detailInfo[@"MoshiApproved"] isEqual:@YES]) {
+        approvedText.text = @"Approved: YES";
+    } else {
+        approvedText.text = @"Approved: NO";
+    }
+}
+
+- (IBAction)editApprove:(id)sender {
+//    [query whereKey:@"name" equalTo:[detailInfo objectForKey:@"name"]
+     PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
+    [query getObjectInBackgroundWithId:detailInfo.objectId block:^(PFObject *mobject, NSError *error) {
+        
+    mobject[@"MoshiApproved"] = @YES;
+    mobject[@"MoshiName"] = nameText.text;
+    mobject[@"MoshiNumber"] = @([numberText.text intValue]);
+    mobject[@"MoshiSeries"] = @([seriesText.text intValue]);
+    mobject[@"MoshiSpecies"] = speciesText.text;
+    mobject[@"MoshiType"] = typeText.text;
+    mobject[@"MoshiLocation"] = locationText.text;
+    mobject[@"MoshiRare"] = rarityText.text;
+    mobject[@"MoshiDescription"] = descriptionText.text;
+    
+    NSData *photo = UIImagePNGRepresentation(chosenImage);
+    PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
+    [mobject setObject:imageFile forKey:@"MoshiPicture"];
+    
+    [mobject saveInBackground];
+    }];
+}
+
+- (IBAction)selectPhoto:(id)sender {
+        [self presentViewController:myPicker animated:YES completion:nil];
+}
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    chosenImage = info[UIImagePickerControllerEditedImage];
+    imageView.image = chosenImage;
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+}
+
+- (IBAction)deleteMoshling:(id)sender {
+    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You are about to delete this helpless Moshling!" delegate:self cancelButtonTitle:@"Ok to Delete" otherButtonTitles:@"Cancel",nil];
+    [alert show];
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        
+//          to delete entire object(row)
+            [detailInfo deleteInBackground];
+          [self.navigationController popViewControllerAnimated:YES];
+            
+//             alternate method
+//                       PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
+//                    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//                        if (!error) {
+//                            NSMutableArray* moshiArray = [[NSMutableArray alloc] initWithArray:objects];
+//                            for (PFObject* obj in moshiArray) {
+//                                        if ([obj[@"MoshiName"]   isEqualToString:@"" ]) {
+//                                            [obj deleteInBackground];
+//                                        }}}
+//                    }];
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -94,7 +94,6 @@
         
         [mobject saveInBackground];
         
-        //                [self.navigationController popViewControllerAnimated:YES];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Submission Successful!" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
         alert.tag = 1;
         [alert show];

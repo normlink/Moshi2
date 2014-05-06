@@ -9,6 +9,7 @@
 #import <Parse/Parse.h>
 #import "ViewController.h"
 #import "MoshiDetailsViewController.h"
+#import "AdminViewController.h"
 
 @interface ViewController () {
     
@@ -16,6 +17,8 @@
     UIActivityIndicatorView *activityIndicator;
     
     NSMutableArray *moshiArray;
+    int enterAdmin;
+    int incrementCheck;
     BOOL editMode;
     //    NSMutableArray *imageArray;
     __weak IBOutlet UISegmentedControl *segmentController;
@@ -32,15 +35,16 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
+
+    enterAdmin = 0;
+    incrementCheck = 0;
+    editMode = NO;
     
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-//    editMode = YES;
     _moshiReady = NO;
-    
     
     loadingView = [[UIView alloc] initWithFrame:CGRectMake(85, 150, 150, 150)];
     loadingView.backgroundColor = [UIColor blackColor];
@@ -71,12 +75,14 @@
 -(void)changeAdminVar:(BOOL)var {
     editMode = var;
     if (editMode == YES) {
-        self.title = @"Admin";
+        self.title = @"*MoshiDex*";
         self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor redColor] forKey:NSForegroundColorAttributeName];
+        enterAdmin +=1;
     }else{
         self.title = @"MoshiDex";
         self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor blackColor] forKey:NSForegroundColorAttributeName];
- 
+        
+        incrementCheck +=1;
     }
     
     NSLog(@"%hhd",editMode);
@@ -84,9 +90,16 @@
 
 
 
-//use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently implemented to facilitate initial admin mode sort.
+//use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently am implementing to facilitate initial admin mode sort, and the increment check to do resort on admin exit.
 -(void)viewWillAppear:(BOOL)animated{
+    if ((editMode == YES) && (enterAdmin == 1)){
         [self getParse];
+        enterAdmin = 0;
+    }
+    if (incrementCheck == 1) {
+        [self getParse];
+        incrementCheck = 0;
+    }
 }
 -(void)getParse{
     PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
@@ -181,7 +194,6 @@
         
         PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
         
-        
         PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
         [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
             if (!error) {
@@ -198,25 +210,22 @@
                 cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
                 
-                
                 cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
                 if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
                     [cell.textLabel setHighlighted:YES];
                     [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
                 }
-
             }
         }];
     } else {
         cell.textLabel.text = @"Loading...";
     }
-    
-    
     return cell;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if ([segue.identifier isEqualToString:@"viewMoshi"]) {
         MoshiDetailsViewController *detailsVC = segue.destinationViewController;
         detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
@@ -226,6 +235,10 @@
         addVC.enterAdminDelegate = self;
         addVC.adminButtonVar = editMode;
     }
+    if ([segue.identifier isEqualToString:@"toAdminVC"]) {
+        AdminViewController *detailsVC = segue.destinationViewController;
+        detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+    }
 }
 
 
@@ -233,7 +246,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_moshiReady) {
         _indexSelected = indexPath.row;
-        [self performSegueWithIdentifier:@"viewMoshi" sender:self];
+        if (editMode == YES) {
+            [self performSegueWithIdentifier:@"toAdminVC" sender:self];
+        } else {
+            [self performSegueWithIdentifier:@"viewMoshi" sender:self];
+        }
     }
 }
 

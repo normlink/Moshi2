@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
-@interface AdminViewController : UIViewController
+@interface AdminViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
+@property (strong, nonatomic) PFObject * detailInfo;
 
 @end
