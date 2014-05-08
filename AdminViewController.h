@@ -9,8 +9,21 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
+@protocol AdminDelegate;
+
 @interface AdminViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
+@property (weak, nonatomic) id <AdminDelegate> adminDelegate;
+@property (nonatomic) BOOL adminReloadVar;
 
 @property (strong, nonatomic) PFObject * detailInfo;
 
 @end
+
+@protocol AdminDelegate <NSObject>
+
+-(void)adminReload:(BOOL)var;
+
+
+@end
+

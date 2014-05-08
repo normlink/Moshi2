@@ -10,7 +10,7 @@
 
 @interface AdminViewController (){
     
-        UIImagePickerController *myPicker;
+    UIImagePickerController *myPicker;
     __weak IBOutlet UITextField *nameText;
     __weak IBOutlet UITextField *numberText;
     __weak IBOutlet UITextField *seriesText;
@@ -22,6 +22,7 @@
     __weak IBOutlet UIImageView *imageView;
     __weak IBOutlet UILabel *approvedText;
     UIImage *chosenImage;
+    UIActivityIndicatorView *activityInd;
 }
 - (IBAction)editApprove:(id)sender;
 - (IBAction)selectPhoto:(id)sender;
@@ -31,23 +32,29 @@
 
 @implementation AdminViewController
 
-@synthesize detailInfo;
+@synthesize detailInfo,adminReloadVar;
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    activityInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityInd.center = self.view.center;
+    [self.view addSubview:activityInd];
+    [self.view bringSubviewToFront:activityInd];
+    [activityInd setHidden:YES];
+    
     myPicker = [[UIImagePickerController alloc]init];
     myPicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     myPicker.allowsEditing = YES;
     myPicker.delegate = self;
-
+    
     [self getPicDoText];
 }
 
 -(void) getPicDoText{
-
+    
     PFFile* pic =[detailInfo objectForKey:@"MoshiPicture"];
     [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         if (!error) {
@@ -72,30 +79,41 @@
 }
 
 - (IBAction)editApprove:(id)sender {
-//    [query whereKey:@"name" equalTo:[detailInfo objectForKey:@"name"]
-     PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
+    [self startAnimate];
+    [self.adminDelegate adminReload:YES];
+    //    [query whereKey:@"name" equalTo:[detailInfo objectForKey:@"name"]
+    PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
     [query getObjectInBackgroundWithId:detailInfo.objectId block:^(PFObject *mobject, NSError *error) {
         
-    mobject[@"MoshiApproved"] = @YES;
-    mobject[@"MoshiName"] = nameText.text;
-    mobject[@"MoshiNumber"] = @([numberText.text intValue]);
-    mobject[@"MoshiSeries"] = @([seriesText.text intValue]);
-    mobject[@"MoshiSpecies"] = speciesText.text;
-    mobject[@"MoshiType"] = typeText.text;
-    mobject[@"MoshiLocation"] = locationText.text;
-    mobject[@"MoshiRare"] = rarityText.text;
-    mobject[@"MoshiDescription"] = descriptionText.text;
-    
-    NSData *photo = UIImagePNGRepresentation(chosenImage);
-    PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
-    [mobject setObject:imageFile forKey:@"MoshiPicture"];
-    
-    [mobject saveInBackground];
+        mobject[@"MoshiApproved"] = @YES;
+        mobject[@"MoshiName"] = nameText.text;
+        mobject[@"MoshiNumber"] = @([numberText.text intValue]);
+        mobject[@"MoshiSeries"] = @([seriesText.text intValue]);
+        mobject[@"MoshiSpecies"] = speciesText.text;
+        mobject[@"MoshiType"] = typeText.text;
+        mobject[@"MoshiLocation"] = locationText.text;
+        mobject[@"MoshiRare"] = rarityText.text;
+        mobject[@"MoshiDescription"] = descriptionText.text;
+        
+        NSData *photo = UIImagePNGRepresentation(chosenImage);
+        PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
+        [mobject setObject:imageFile forKey:@"MoshiPicture"];
+        
+        [mobject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                [self finishAnimate];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                NSString *errorString = [[error userInfo] objectForKey:@"error"];
+                NSLog(@"Error: %@", errorString);
+                [self finishAnimate];
+            }
+        }];
     }];
 }
 
 - (IBAction)selectPhoto:(id)sender {
-        [self presentViewController:myPicker animated:YES completion:nil];
+    [self presentViewController:myPicker animated:YES completion:nil];
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
@@ -118,22 +136,44 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
+        [self startAnimate];
+        [self.adminDelegate adminReload:YES];
         
-//          to delete entire object(row)
-            [detailInfo deleteInBackground];
-          [self.navigationController popViewControllerAnimated:YES];
-            
-//             alternate method
-//                       PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
-//                    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//                        if (!error) {
-//                            NSMutableArray* moshiArray = [[NSMutableArray alloc] initWithArray:objects];
-//                            for (PFObject* obj in moshiArray) {
-//                                        if ([obj[@"MoshiName"]   isEqualToString:@"" ]) {
-//                                            [obj deleteInBackground];
-//                                        }}}
-//                    }];
+        // to delete entire object(row)
+        [detailInfo deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                [self finishAnimate];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                NSString *errorString = [[error userInfo] objectForKey:@"error"];
+                NSLog(@"Error: %@", errorString);
+                [self finishAnimate];
+            }
+        }];
     }
+//                alternate delete method
+//                PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
+//                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//                    if (!error) {
+//                        NSMutableArray* moshiArray = [[NSMutableArray alloc] initWithArray:objects];
+//                            for (PFObject* obj in moshiArray) {
+//                                if ([obj[@"MoshiName"]   isEqualToString:@"" ]) {
+//                                    [obj deleteInBackground];
+//                            }}}
+//                }];
+    
+}
+- (void)startAnimate {
+    [self.view setUserInteractionEnabled:NO];
+    [activityInd setHidden:NO];
+    [activityInd startAnimating];
+}
+
+- (void)finishAnimate {
+    [activityInd setHidden:YES];
+    [activityInd stopAnimating];
+    [self.view setUserInteractionEnabled:YES];
+    
 }
 - (void)didReceiveMemoryWarning
 {

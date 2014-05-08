@@ -20,6 +20,7 @@
     int enterAdmin;
     int incrementCheck;
     BOOL editMode;
+    BOOL didEdit;
     //    NSMutableArray *imageArray;
     __weak IBOutlet UISegmentedControl *segmentController;
     __weak IBOutlet UITableView *moshiTableView;
@@ -35,16 +36,14 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-
+    
     enterAdmin = 0;
     incrementCheck = 0;
     editMode = NO;
-    
+    didEdit = NO;
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
-    
-    _moshiReady = NO;
     
     loadingView = [[UIView alloc] initWithFrame:CGRectMake(85, 150, 150, 150)];
     loadingView.backgroundColor = [UIColor blackColor];
@@ -75,7 +74,7 @@
 -(void)changeAdminVar:(BOOL)var {
     editMode = var;
     if (editMode == YES) {
-        self.title = @"*MoshiDex*";
+        self.title = @"AdminMode";
         self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:[UIColor redColor] forKey:NSForegroundColorAttributeName];
         enterAdmin +=1;
     }else{
@@ -88,15 +87,27 @@
     NSLog(@"%hhd",editMode);
 }
 
+#pragma mark AdminDelegate
+-(void)adminReload:(BOOL)var {
+    didEdit = var;
+}
 
 
-//use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently am implementing to facilitate initial admin mode sort, and the increment check to do resort on admin exit.
+
+//use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently am implementing to facilitate initial admin mode sort, and the increment check to do resort on admin exit., and when do edit/approve/delete.
 -(void)viewWillAppear:(BOOL)animated{
+    if (didEdit == YES) {
+        [self startLoading];
+        [self getParse];
+        didEdit = NO;
+    }
     if ((editMode == YES) && (enterAdmin == 1)){
+        [self startLoading];
         [self getParse];
         enterAdmin = 0;
     }
     if (incrementCheck == 1) {
+        [self startLoading];
         [self getParse];
         incrementCheck = 0;
     }
@@ -130,9 +141,8 @@
 }
 
 - (void)reloadData {
-    if (/*imageArray.count == */ moshiArray.count) {
+    if (moshiArray) {
         [moshiTableView reloadData];
-        _moshiReady = YES;
         [self stopLoading];
     }
     else {
@@ -167,9 +177,7 @@
             break;
         default:
             break;
-            
     }
-    
 }
 
 #pragma mark UITableView Delegate
@@ -188,9 +196,8 @@
     
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cellIdentifer"];
-        
     }
-    if (moshiArray.count ) {
+    if (moshiArray) {
         
         PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
         
@@ -237,6 +244,7 @@
     }
     if ([segue.identifier isEqualToString:@"toAdminVC"]) {
         AdminViewController *detailsVC = segue.destinationViewController;
+        detailsVC.adminDelegate = self;
         detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
     }
 }
@@ -244,14 +252,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (_moshiReady) {
         _indexSelected = indexPath.row;
         if (editMode == YES) {
             [self performSegueWithIdentifier:@"toAdminVC" sender:self];
         } else {
             [self performSegueWithIdentifier:@"viewMoshi" sender:self];
         }
-    }
+    
 }
 
 

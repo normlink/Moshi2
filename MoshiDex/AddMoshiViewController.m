@@ -53,24 +53,7 @@
 }
 
 - (IBAction)submitMoshi:(id)sender {
-    //        to delete entire object(row)
-    //        PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];
-    //
-    //        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-    //            if (!error) {
-    //               NSMutableArray* moshiArray = [[NSMutableArray alloc] initWithArray:objects];
-    //
-    //                for (PFObject* obj in moshiArray) {
-    //
-    //
-    //                            if ([obj[@"MoshiName"]   isEqualToString:@"" ]) {
-    //                                [obj deleteInBackground];
-    //                            }}}
-    ////                        NSLog(@"%lu, %lu %@",(unsigned long)moshiArray.count,(unsigned long)imageArray.count ,[obj objectForKey:@"MoshiNumber"]);
-    //
-    //            }}
-    //               }];
-    
+   
     if (([nameText.text isEqualToString:@""]) || (imageView.image == nil))   {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You must add both a picture and Moshling name to Submit" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
         [alert show];
