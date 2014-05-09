@@ -13,8 +13,7 @@
 
 @interface ViewController () {
     
-    UIView *loadingView;
-    UIActivityIndicatorView *activityIndicator;
+    UIActivityIndicatorView *activityInd;
     
     NSMutableArray *moshiArray;
     int enterAdmin;
@@ -45,23 +44,13 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-    loadingView = [[UIView alloc] initWithFrame:CGRectMake(85, 150, 150, 150)];
-    loadingView.backgroundColor = [UIColor blackColor];
-    [loadingView setAlpha:0.8];
-    loadingView.layer.cornerRadius = 25;
-    [loadingView.layer setMasksToBounds:YES];
-    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 50, 100, 100)];
-    loadingLabel.text = @"Loading";
-    loadingLabel.font = [UIFont systemFontOfSize:18];
-    loadingLabel.textColor = [UIColor whiteColor];
-    loadingLabel.textAlignment = NSTextAlignmentCenter;
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    activityIndicator.frame = CGRectMake(75, 60, 0, 0);
-    
-    [loadingView addSubview:loadingLabel];
-    [loadingView addSubview:activityIndicator];
-    [self.view addSubview:loadingView];
-    [self.view bringSubviewToFront:loadingView];
+    activityInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityInd.center = self.view.center;
+    [activityInd setColor:[UIColor yellowColor]];
+    [activityInd setBackgroundColor:[UIColor blackColor]];
+    [self.view addSubview:activityInd];
+    [self.view bringSubviewToFront:activityInd];
+    [activityInd setHidden:YES];
     
     [self startLoading];
     
@@ -96,6 +85,7 @@
 
 //use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently am implementing to facilitate initial admin mode sort, and the increment check to do resort on admin exit., and when do edit/approve/delete.
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if (didEdit == YES) {
         [self startLoading];
         [self getParse];
@@ -156,13 +146,11 @@
 
 - (void)startLoading {
     [self.view setUserInteractionEnabled:NO];
-    [loadingView setHidden:NO];
-    [activityIndicator startAnimating];
+    [activityInd startAnimating];
 }
 
 - (void)stopLoading {
-    [loadingView setHidden:YES];
-    [activityIndicator stopAnimating];
+    [activityInd stopAnimating];
     [self.view setUserInteractionEnabled:YES];
 }
 - (IBAction)sortSelection:(id)sender {

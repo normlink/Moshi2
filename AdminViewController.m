@@ -41,6 +41,8 @@
     
     activityInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityInd.center = self.view.center;
+    [activityInd setColor:[UIColor yellowColor]];
+    [activityInd setBackgroundColor:[UIColor blackColor]];
     [self.view addSubview:activityInd];
     [self.view bringSubviewToFront:activityInd];
     [activityInd setHidden:YES];
