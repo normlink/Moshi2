@@ -73,7 +73,7 @@
         incrementCheck +=1;
     }
     
-    NSLog(@"%hhd",editMode);
+//    NSLog(@"%hhd",editMode);
 }
 
 #pragma mark AdminDelegate
@@ -83,7 +83,7 @@
 
 
 
-//use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently am implementing to facilitate initial admin mode sort, and the increment check to do resort on admin exit., and when do edit/approve/delete.
+//use viewWillAppear to refresh on return to view. Did not implement initially as only needed for admin auto-return from Approval, and data not updated fast enough from Parse before transition (usually takes another couple seconds). Currently am implementing to facilitate initial admin mode sort, and the increment check to do resort on admin exit., and (in concert w/completion block) when do edit/approve/delete.
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (didEdit == YES) {

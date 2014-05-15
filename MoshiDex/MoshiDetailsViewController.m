@@ -26,20 +26,7 @@
 
 @synthesize detailInfo;
 
-//- (void)viewDidLoad {
-//    [super viewDidLoad];
-//    self.title = _nameIncoming;
-//    avatar.image = _imageIncoming;
-//
-//    NSLog(@"%@", _seriesIncoming);
-//    number.text = [NSString stringWithFormat:@"Number:  %@", _numberIncoming];
-//    series.text = [NSString stringWithFormat:@"Series:  %@", _seriesIncoming];
-//    species.text = [NSString stringWithFormat:@"Species:  %@", _speciesIncoming];
-//    type.text = [NSString stringWithFormat:@"Type:  %@", _typeIncoming];
-//    location.text = [NSString stringWithFormat:@"Location:  %@", _locationIncoming];
-//    rarity.text = [NSString stringWithFormat:@"Rarity:  %@", _rarityIncoming];
-//    description.text = _descriptionIncoming;
-//}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -60,6 +47,10 @@
                 [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                     if (!error) {
                         avatar.image = [UIImage imageWithData:data];
+                    }else {
+                        NSString *errorString = [[error userInfo] objectForKey:@"error"];
+                        UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                        [errorAlertView show];
                     }
                 }];
     
@@ -71,13 +62,7 @@
                 location.text = [NSString stringWithFormat:@"Location:  %@", detailInfo[@"MoshiLocation"]];
                 rarity.text = [NSString stringWithFormat:@"Rarity:  %@", detailInfo[@"MoshiRare"]];
                 description.text = detailInfo[@"MoshiDescription"];
-//
-////            }
-//        } else {
-//            NSString *errorString = [[error userInfo] objectForKey:@"error"];
-//            NSLog(@"Error: %@", errorString);
-//        }
-//    }];
+
 }
 
 @end

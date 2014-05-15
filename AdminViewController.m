@@ -62,6 +62,10 @@
         if (!error) {
             imageView.image = [UIImage imageWithData:data];
             chosenImage = imageView.image;
+        }else {
+            NSString *errorString = [[error userInfo] objectForKey:@"error"];
+            UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [errorAlertView show];
         }
     }];
     
@@ -133,25 +137,30 @@
 - (IBAction)deleteMoshling:(id)sender {
     
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You are about to delete this helpless Moshling!" delegate:self cancelButtonTitle:@"Ok to Delete" otherButtonTitles:@"Cancel",nil];
+    alert.tag = 1;
     [alert show];
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
-        [self startAnimate];
-        [self.adminDelegate adminReload:YES];
-        
-        // to delete entire object(row)
-        [detailInfo deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                [self finishAnimate];
-                [self.navigationController popViewControllerAnimated:YES];
-            } else {
-                NSString *errorString = [[error userInfo] objectForKey:@"error"];
-                NSLog(@"Error: %@", errorString);
-                [self finishAnimate];
-            }
-        }];
+        if (alertView.tag == 1) {
+            [self startAnimate];
+            [self.adminDelegate adminReload:YES];
+            
+            // to delete entire object(row)
+            [detailInfo deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    [self finishAnimate];
+                    [self.navigationController popViewControllerAnimated:YES];
+                } else {
+                    NSString *errorString = [[error userInfo] objectForKey:@"error"];
+                    UIAlertView *errorAlertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                    [errorAlertView show];
+                    
+                    [self finishAnimate];
+                }
+            }];
+        }
     }
 //                alternate delete method
 //                PFQuery *query = [PFQuery queryWithClassName:@"MoshiData"];

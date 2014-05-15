@@ -146,7 +146,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" cyan="0.05825159672" magenta="0.0" yellow="0.0" black="0.0" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="AwO-xb-bbX">
                         <nil key="title"/>
@@ -265,7 +265,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.8800824016613028" blue="0.96816217772051127" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Admin" id="Z0R-WK-ZdB">
                         <barButtonItem key="rightBarButtonItem" title="Edit/Approve" id="tdg-IV-rFx">
@@ -394,7 +394,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.92951950372182346" green="1" blue="0.930113649760681" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="ZsX-pj-Nes">
                         <barButtonItem key="rightBarButtonItem" title="Submit for Approval" id="UP6-9H-ClO">
