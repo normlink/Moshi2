@@ -14,8 +14,9 @@
 @interface ViewController () {
     
     UIActivityIndicatorView *activityInd;
-    
+    UILocalizedIndexedCollation *collation;
     NSMutableArray *moshiArray;
+    NSMutableArray *sections;
     int enterAdmin;
     int incrementCheck;
     BOOL editMode;
@@ -124,6 +125,7 @@
         if (!error) {
             moshiArray = [[NSMutableArray alloc] initWithArray:objects];
             NSLog(@"arraycount %lu",(unsigned long)moshiArray.count );
+            [self partitionObjects:moshiArray];
         }
         [self reloadData];
     }];
@@ -167,13 +169,84 @@
             break;
     }
 }
+- (NSMutableArray *)partitionObjects:(NSMutableArray *)array
+{
+    //    SEL selector = @selector(localizedTitle);
+    collation = [UILocalizedIndexedCollation currentCollation];
+    NSInteger sectionCount = [[collation sectionTitles] count];
+    NSMutableArray *unsortedSections = [NSMutableArray arrayWithCapacity:sectionCount];
+    for(int i = 0; i < sectionCount; i++) {
+        [unsortedSections addObject:[NSMutableArray array]];
+    }
+    for (id object in array)
+    {
+        NSInteger index = [collation sectionForObject:object[@"MoshiName"] collationStringSelector:@selector(lowercaseString)];
+        [[unsortedSections objectAtIndex:index] addObject:object];
+    }
+    sections = [NSMutableArray arrayWithCapacity:sectionCount];
+    int log = 0;
+    for (NSMutableArray *section in unsortedSections) {
+        log+=1;
+        if (![section count] || (section == nil)) {
+            [sections addObject:section];
+            NSLog(@"Log %d Part1 sections %lu",log,(unsigned long)[sections count]);
+        } else {
+//                        [sections addObject:[collation sortedArrayFromArray:section collationStringSelector:NSSelectorFromString(@"MoshiName")]];
+//              Could not figure out proper collationStringSelector so used NSSortDescriptor below:
+            NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"MoshiName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+            NSArray *sortDescriptors = @[sorter];
+            NSArray *sortedArray = [section sortedArrayUsingDescriptors:sortDescriptors];
+            [sections addObject:sortedArray];
+            NSLog(@"Log %d Part2 sections %lu",log,(unsigned long)[sections count]);
+        }
+    }
+    //        sections = unsortedSections;
+    NSLog(@"unsorted %lu sections %lu", (unsigned long)[unsortedSections count],(unsigned long)[sections count]);
+    return sections;
+}
 
 #pragma mark UITableView Delegate
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if ([[sections objectAtIndex:section] count] > 0) {
+        if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)){
+            return [[collation sectionTitles] objectAtIndex:section];
+        }
+    }
+    return nil;
+}
+// This didn't work to eliminate unused index titles:
+//- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+//{
+//    return [collation sectionForSectionIndexTitleAtIndex:index];
+//}
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    // Set the text color of our header/footer text.
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    //    [header.textLabel setTextColor:[UIColor whiteColor]];
+    
+    // Set the background color of our header/footer.
+    header.contentView.backgroundColor = [UIColor yellowColor];
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)){
+        return [collation sectionIndexTitles];
+    }
+    return nil;
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)){
+        return [[collation sectionTitles] count];
+        NSLog(@"titlecount %d",[[collation sectionTitles] count]);
+    }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
+        return [[sections objectAtIndex:section] count];
+    }
     return moshiArray.count;
 }
 
@@ -181,13 +254,32 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellIdentifier"];
     
     
-    
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cellIdentifer"];
     }
     if (moshiArray) {
-        
-        PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
+        if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
+          PFObject* cellObject = [[sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+            PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+            [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                if (!error) {
+                    
+                    UIImage *picture = [UIImage imageWithData:data];
+                    
+                    cell.imageView.image = picture;
+                    
+                    cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
+                    if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
+                        [cell.textLabel setHighlighted:YES];
+                        [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
+                    }
+                }
+            }];
+
+        }else{
+            PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
+    
         
         PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
         [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
@@ -198,13 +290,13 @@
                 cell.imageView.image = picture;
                 
                 //to same-size cell pics (pics may be distorted with this method)
-                CGSize itemSize = CGSizeMake(50, 40);
-                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                [cell.imageView.image drawInRect:imageRect];
-                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                
+//                CGSize itemSize = CGSizeMake(50, 40);
+//                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+//                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+//                [cell.imageView.image drawInRect:imageRect];
+//                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+//                UIGraphicsEndImageContext();
+        
                 cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
                 if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
@@ -213,11 +305,18 @@
                 }
             }
         }];
-    } else {
+        } }else {
         cell.textLabel.text = @"Loading...";
     }
     return cell;
 }
+//-(id)getCorrectPFObject{
+//    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
+//        PFObject* cellObject = [[sectionedArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+//        return cellObject;
+//    }
+//    return moshiArray;
+//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
