@@ -371,27 +371,19 @@
     }
     return cell;
 }
-//-(id)getCorrectPFObject{
-//    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
-//        PFObject* cellObject = [[sectionedArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-//        return cellObject;
-//    }
-//    return moshiArray;
-//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"viewMoshi"]) {
-        NSIndexPath *indexPath = nil;
+//        NSIndexPath *indexPath = nil;
         
         if (self.searchDisplayController.active) {
-            indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+//           NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
             MoshiDetailsViewController *detailsVC = segue.destinationViewController;
             detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
         }else{
-            indexPath = [moshiTableView indexPathForSelectedRow];
             MoshiDetailsViewController *detailsVC = segue.destinationViewController;
-            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+            detailsVC.detailInfo = [[sections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
         }
     }
     if ([segue.identifier isEqualToString:@"addMoshi"]) {
@@ -400,15 +392,15 @@
         addVC.adminButtonVar = editMode;
     }
     if ([segue.identifier isEqualToString:@"toAdminVC"]) {
-        NSIndexPath *indexPath = nil;
+//        NSIndexPath *indexPath = nil;
         
         if (self.searchDisplayController.active) {
-            indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+//            indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
             AdminViewController *detailsVC = segue.destinationViewController;
             detailsVC.adminDelegate = self;
             detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
         }else{
-            indexPath = [moshiTableView indexPathForSelectedRow];
+//            indexPath = [moshiTableView indexPathForSelectedRow];
             AdminViewController *detailsVC = segue.destinationViewController;
             detailsVC.adminDelegate = self;
             detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
@@ -420,6 +412,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
         _indexSelected = indexPath.row;
+        _indexSection = indexPath.section;
+
         if (editMode == YES) {
             [self performSegueWithIdentifier:@"toAdminVC" sender:self];
         } else {

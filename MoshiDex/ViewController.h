@@ -14,5 +14,7 @@
 
 
 @property (nonatomic) NSInteger indexSelected;
+@property (nonatomic) NSInteger indexSection;
+
 
 @end
