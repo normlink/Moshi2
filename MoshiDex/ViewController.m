@@ -375,15 +375,38 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"viewMoshi"]) {
-//        NSIndexPath *indexPath = nil;
-        
-        if (self.searchDisplayController.active) {
-//           NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
-            MoshiDetailsViewController *detailsVC = segue.destinationViewController;
-            detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+//       NSIndexPath *indexPath = nil;
+        if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
+            if (self.searchDisplayController.active) {
+//                NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+                MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+                detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+            }else{
+                MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+                detailsVC.detailInfo = [[sections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
+            }
         }else{
-            MoshiDetailsViewController *detailsVC = segue.destinationViewController;
-            detailsVC.detailInfo = [[sections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
+            if (self.searchDisplayController.active) {
+//                NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+                MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+                detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+            }else{
+                MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+                detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+        }
+        
+        
+//        if (self.searchDisplayController.active) {
+////           NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+//            MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+//            detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+//        }if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
+//            MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+//            detailsVC.detailInfo = [[sections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
+//        } else {
+//            MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+//            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+//        }
         }
     }
     if ([segue.identifier isEqualToString:@"addMoshi"]) {
