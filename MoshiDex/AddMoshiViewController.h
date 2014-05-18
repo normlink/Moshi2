@@ -20,6 +20,7 @@
 @protocol AddMoshiDelegate <NSObject>
 
 -(void)changeAdminVar:(BOOL)var;
+-(void)changeSubmitVar:(BOOL)var;
 
 
 @end

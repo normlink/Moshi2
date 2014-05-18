@@ -39,6 +39,15 @@
                                     <constraint firstAttribute="height" constant="568" id="WjR-93-Nx5"/>
                                     <constraint firstAttribute="width" constant="320" id="ozQ-QJ-xeO"/>
                                 </constraints>
+                                <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search Name" showsCancelButton="YES" id="xsz-Sk-ih9">
+                                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <color key="barTintColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="vXZ-lx-hvc" id="C1O-h1-Hfc"/>
+                                    </connections>
+                                </searchBar>
                                 <connections>
                                     <outlet property="dataSource" destination="vXZ-lx-hvc" id="ZCU-O7-tGD"/>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="7Pg-Y1-alo"/>
@@ -70,6 +79,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="moshiTableView" destination="r9s-XF-1im" id="iR5-Um-RE0"/>
+                        <outlet property="searchDisplayController" destination="F7H-mf-DvO" id="ee9-3r-Jwy"/>
                         <outlet property="segmentController" destination="uZx-6f-fIr" id="zxv-cr-8m6"/>
                         <segue destination="EhY-Sg-dX6" kind="push" identifier="addMoshi" id="LAl-Nd-aZi"/>
                         <segue destination="TRk-7e-6tg" kind="push" identifier="viewMoshi" id="zwP-9X-Wfh"/>
@@ -77,8 +87,17 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="F7H-mf-DvO">
+                    <connections>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="mbc-MJ-b4o"/>
+                        <outlet property="searchBar" destination="xsz-Sk-ih9" id="9Ox-CI-13N"/>
+                        <outlet property="searchContentsController" destination="vXZ-lx-hvc" id="UCl-vq-XrR"/>
+                        <outlet property="searchResultsDataSource" destination="vXZ-lx-hvc" id="X2w-AD-uHa"/>
+                        <outlet property="searchResultsDelegate" destination="vXZ-lx-hvc" id="3YY-pv-vRV"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="336" y="-6"/>
+            <point key="canvasLocation" x="330" y="-6"/>
         </scene>
         <!--Moshi Details View Controller-->
         <scene sceneID="tMf-m9-qRV">

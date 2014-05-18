@@ -17,10 +17,12 @@
     UILocalizedIndexedCollation *collation;
     NSMutableArray *moshiArray;
     NSMutableArray *sections;
+    NSArray *searchResults;
     int enterAdmin;
     int incrementCheck;
     BOOL editMode;
     BOOL didEdit;
+    BOOL didSubmit;
     //    NSMutableArray *imageArray;
     __weak IBOutlet UISegmentedControl *segmentController;
     __weak IBOutlet UITableView *moshiTableView;
@@ -41,6 +43,7 @@
     incrementCheck = 0;
     editMode = NO;
     didEdit = NO;
+    didSubmit = NO;
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
@@ -73,8 +76,10 @@
         
         incrementCheck +=1;
     }
-    
 //    NSLog(@"%hhd",editMode);
+}
+-(void)changeSubmitVar:(BOOL)var{
+    didSubmit = var;
 }
 
 #pragma mark AdminDelegate
@@ -96,6 +101,11 @@
         [self startLoading];
         [self getParse];
         enterAdmin = 0;
+    }
+    if ((editMode == YES) && (didSubmit == YES)){
+        [self startLoading];
+        [self getParse];
+        didSubmit = NO;
     }
     if (incrementCheck == 1) {
         [self startLoading];
@@ -204,11 +214,27 @@
     NSLog(@"unsorted %lu sections %lu", (unsigned long)[unsortedSections count],(unsigned long)[sections count]);
     return sections;
 }
+-(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"MoshiName contains[c] %@",searchText];
+    searchResults = [moshiArray filteredArrayUsingPredicate:resultPredicate];
+}
+
+#pragma mark Search Delegate
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString
+                               scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
+                                      objectAtIndex:[self.searchDisplayController.searchBar
+                                                     selectedScopeButtonIndex]]];
+    
+    return YES;
+}
+
 
 #pragma mark UITableView Delegate
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if ([[sections objectAtIndex:section] count] > 0) {
-        if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)){
+        if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
             return [[collation sectionTitles] objectAtIndex:section];
         }
     }
@@ -230,13 +256,13 @@
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)){
+    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
         return [collation sectionIndexTitles];
     }
     return nil;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)){
+    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
         return [[collation sectionTitles] count];
         NSLog(@"titlecount %d",[[collation sectionTitles] count]);
     }
@@ -244,6 +270,10 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return [searchResults count];
+        
+    }else
     if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
         return [[sections objectAtIndex:section] count];
     }
@@ -257,6 +287,37 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cellIdentifer"];
     }
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        PFObject* cellObject = [searchResults objectAtIndex:indexPath.row];
+        
+        
+        PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+        [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            if (!error) {
+                
+                UIImage *picture = [UIImage imageWithData:data];
+                
+                cell.imageView.image = picture;
+                
+                //to same-size cell pics (pics may be distorted with this method)
+                //                CGSize itemSize = CGSizeMake(50, 40);
+                //                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+                //                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+                //                [cell.imageView.image drawInRect:imageRect];
+                //                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+                //                UIGraphicsEndImageContext();
+                
+                cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
+                if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
+                    [cell.textLabel setHighlighted:YES];
+                    [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
+                }
+            }
+        }];
+
+    } else
+    
     if (moshiArray) {
         if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
           PFObject* cellObject = [[sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
@@ -321,8 +382,17 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"viewMoshi"]) {
-        MoshiDetailsViewController *detailsVC = segue.destinationViewController;
-        detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+        NSIndexPath *indexPath = nil;
+        
+        if (self.searchDisplayController.active) {
+            indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+            MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+            detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+        }else{
+            indexPath = [moshiTableView indexPathForSelectedRow];
+            MoshiDetailsViewController *detailsVC = segue.destinationViewController;
+            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+        }
     }
     if ([segue.identifier isEqualToString:@"addMoshi"]) {
         AddMoshiViewController *addVC = segue.destinationViewController;
@@ -330,9 +400,19 @@
         addVC.adminButtonVar = editMode;
     }
     if ([segue.identifier isEqualToString:@"toAdminVC"]) {
-        AdminViewController *detailsVC = segue.destinationViewController;
-        detailsVC.adminDelegate = self;
-        detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+        NSIndexPath *indexPath = nil;
+        
+        if (self.searchDisplayController.active) {
+            indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+            AdminViewController *detailsVC = segue.destinationViewController;
+            detailsVC.adminDelegate = self;
+            detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+        }else{
+            indexPath = [moshiTableView indexPathForSelectedRow];
+            AdminViewController *detailsVC = segue.destinationViewController;
+            detailsVC.adminDelegate = self;
+            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+        }
     }
 }
 

@@ -13,6 +13,7 @@
     UIImagePickerController *myPicker;
     __weak IBOutlet UIImageView *imageView;
     UIImage *chosenImage;
+    UIActivityIndicatorView *activityInd;
     __weak IBOutlet UITextField *nameText;
     __weak IBOutlet UITextField *numberText;
     __weak IBOutlet UITextField *seriesText;
@@ -40,6 +41,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    activityInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityInd.center = self.view.center;
+    [activityInd setColor:[UIColor yellowColor]];
+    [activityInd setBackgroundColor:[UIColor blackColor]];
+    [self.view addSubview:activityInd];
+    [self.view bringSubviewToFront:activityInd];
+    [activityInd setHidden:YES];
+    
     if (adminButtonVar == YES) {
         [adminButton setTitle:@"Exit Admin" forState:UIControlStateNormal];
         [adminButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
@@ -57,8 +66,39 @@
     if (([nameText.text isEqualToString:@""]) || (imageView.image == nil))   {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You must add both a picture and Moshling name to Submit" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
         [alert show];
-    } else {
+    }
+    if (adminButtonVar == YES) {
+        [self startAnimate];
+        [self.enterAdminDelegate changeSubmitVar:YES];
         
+        PFObject *mobject = [PFObject objectWithClassName:@"MoshiData"];
+        
+        mobject[@"MoshiApproved"] = @NO;
+        mobject[@"MoshiName"] = nameText.text;
+        mobject[@"MoshiNumber"] = @([numberText.text intValue]);
+        mobject[@"MoshiSeries"] = @([seriesText.text intValue]);
+        mobject[@"MoshiSpecies"] = speciesText.text;
+        mobject[@"MoshiType"] = typeText.text;
+        mobject[@"MoshiLocation"] = locationText.text;
+        mobject[@"MoshiRare"] = rarityText.text;
+        mobject[@"MoshiDescription"] = descriptionText.text;
+        
+        NSData *photo = UIImagePNGRepresentation(chosenImage);
+        PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
+        [mobject setObject:imageFile forKey:@"MoshiPicture"];
+        
+        [mobject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                [self finishAnimate];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                NSString *errorString = [[error userInfo] objectForKey:@"error"];
+                NSLog(@"Error: %@", errorString);
+                [self finishAnimate];
+            }
+        }];
+    }else{
+    
         PFObject *mobject = [PFObject objectWithClassName:@"MoshiData"];
         
         mobject[@"MoshiApproved"] = @NO;
@@ -129,6 +169,18 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+}
+- (void)startAnimate {
+    [self.view setUserInteractionEnabled:NO];
+    [activityInd setHidden:NO];
+    [activityInd startAnimating];
+}
+
+- (void)finishAnimate {
+    [activityInd setHidden:YES];
+    [activityInd stopAnimating];
+    [self.view setUserInteractionEnabled:YES];
     
 }
 
