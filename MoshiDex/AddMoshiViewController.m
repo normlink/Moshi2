@@ -26,17 +26,21 @@
     __weak IBOutlet UITextField *passwordText;
     __weak IBOutlet UIButton *adminButton;
     
+    __weak IBOutlet UIButton *addDescriptionButton;
+    __weak IBOutlet UITextField *testTextField;
 }
 
 - (IBAction)submitMoshi:(id)sender;
 - (IBAction)selectPhoto:(id)sender;
 - (IBAction)enterAdmin:(id)sender;
+- (IBAction)addDescription:(id)sender;
 
 @end
 
 @implementation AddMoshiViewController
 
 @synthesize adminButtonVar;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -159,6 +163,20 @@
     }
 }
 
+- (IBAction)addDescription:(id)sender {
+    if ([addDescriptionButton.titleLabel.text isEqualToString:@"Add Description"]) {
+        [descriptionText setHidden:NO];
+        [self.view bringSubviewToFront:descriptionText];
+        [addDescriptionButton setTitle:@"Finished Add" forState:UIControlStateNormal];
+    } else {
+        [descriptionText setHidden:YES];
+        [addDescriptionButton setTitle:@"Add Description" forState:UIControlStateNormal];
+        [descriptionText resignFirstResponder];
+    }
+    
+    
+}
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     chosenImage = info[UIImagePickerControllerEditedImage];
@@ -183,5 +201,93 @@
     [self.view setUserInteractionEnabled:YES];
     
 }
+//-(void) textViewDidBeginEditing:(UITextView *)textView {
+//    
+//    CGRect textFieldRect = [self.view.window convertRect:textView.bounds fromView:textView];
+//    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
+//    
+//    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
+//    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
+//    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
+//    CGFloat heightFraction = numerator / denominator;
+//    
+//    if(heightFraction < 0.0){
+//        
+//        heightFraction = 0.0;
+//        
+//    }else if(heightFraction > 1.0){
+//        
+//        heightFraction = 1.0;
+//    }
+//    
+//    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+//    
+//    if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown){
+//        
+//        animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
+//        
+//    }else{
+//        
+//        animatedDistance = floor(LANDSCAPE_KEYBOARD_HEIGHT * heightFraction);
+//    }
+//    
+//    CGRect viewFrame = self.view.frame;
+//    viewFrame.origin.y -= animatedDistance;
+//    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
+//    
+//    [self.view setFrame:viewFrame];
+//    
+//    [UIView commitAnimations];
+//}
+//
+//- (void)textViewDidEndEditing:(UITextView *)textView{
+//    
+//    CGRect viewFrame = self.view.frame;
+//    viewFrame.origin.y += animatedDistance;
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
+//    
+//    [self.view setFrame:viewFrame];
+//    [UIView commitAnimations];
+//}
+//
+//-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+//{
+//    if([text isEqualToString:@"\n"])
+//    {
+//        [textView resignFirstResponder];
+//        return NO;
+//    }
+//    return YES;
+//}
+//
+
+//- (void)keyboardWillShow:(NSNotification *)notif
+//{
+//    if (([testTextField isFirstResponder]) && (self.view.frame.origin.y >= 0))
+//    {
+//        [self setViewMovedUp:YES];
+//    }
+//    else if (!([testTextField isFirstResponder]) && (self.view.frame.origin.y < 0))
+//    {
+//        [self setViewMovedUp:NO];
+//    }
+//}
+//
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+//                                                 name:UIKeyboardWillShowNotification object:self.view.window];
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+//}
+
 
 @end

@@ -21,12 +21,15 @@
     __weak IBOutlet UITextView *descriptionText;
     __weak IBOutlet UIImageView *imageView;
     __weak IBOutlet UILabel *approvedText;
+    __weak IBOutlet UIButton *editDescriptionButton;
+    
     UIImage *chosenImage;
     UIActivityIndicatorView *activityInd;
 }
 - (IBAction)editApprove:(id)sender;
 - (IBAction)selectPhoto:(id)sender;
 - (IBAction)deleteMoshling:(id)sender;
+- (IBAction)editDescription:(id)sender;
 
 @end
 
@@ -139,6 +142,18 @@
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You are about to delete this helpless Moshling!" delegate:self cancelButtonTitle:@"Ok to Delete" otherButtonTitles:@"Cancel",nil];
     alert.tag = 1;
     [alert show];
+}
+
+- (IBAction)editDescription:(id)sender {
+    if ([editDescriptionButton.titleLabel.text isEqualToString:@"Edit Description"]) {
+        [descriptionText setHidden:NO];
+        [self.view bringSubviewToFront:descriptionText];
+        [editDescriptionButton setTitle:@"Finished Edit" forState:UIControlStateNormal];
+    } else {
+        [descriptionText setHidden:YES];
+        [editDescriptionButton setTitle:@"Edit Description" forState:UIControlStateNormal];
+        [descriptionText resignFirstResponder];
+    }
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {

@@ -10,7 +10,7 @@
 
 @protocol AddMoshiDelegate;
 
-@interface AddMoshiViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface AddMoshiViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextViewDelegate>
 
 @property (weak, nonatomic) id <AddMoshiDelegate> enterAdminDelegate;
 @property (nonatomic) BOOL adminButtonVar;
