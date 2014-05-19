@@ -421,6 +421,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="64" id="NUX-Tx-57R"/>
+                                    <constraint firstAttribute="height" constant="30" id="VtU-yv-4mn"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -429,6 +430,7 @@
                                 <rect key="frame" x="245" y="70" width="55" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="00d-Uk-se5"/>
                                     <constraint firstAttribute="width" constant="55" id="2xu-bL-hW7"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -439,6 +441,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="88" id="J79-GX-ccf"/>
+                                    <constraint firstAttribute="height" constant="30" id="Vrc-RY-R5D"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -447,6 +450,7 @@
                                 <rect key="frame" x="115" y="108" width="88" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="f5l-qp-OJc"/>
                                     <constraint firstAttribute="width" constant="88" id="pAZ-DJ-qrG"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -455,18 +459,27 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="location" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="99a-0f-4u6">
                                 <rect key="frame" x="19" y="146" width="161" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="zX8-3i-rJR"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="rarity" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SMf-4a-x50">
                                 <rect key="frame" x="212" y="108" width="88" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="W8u-uF-VmD"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Iht-1a-ubk">
                                 <rect key="frame" x="19" y="70" width="146" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="nrJ-hq-iDj"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -501,6 +514,9 @@
                                 <rect key="frame" x="245" y="146" width="55" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="dui-6b-xkU"/>
+                                </constraints>
                                 <color key="textColor" red="0.15521364795918369" green="0.15521364795918369" blue="0.15521364795918369" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -523,6 +539,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rXc-WH-8Yw">
                                 <rect key="frame" x="20" y="180" width="138" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="138" id="jQN-qv-Hnh"/>
+                                </constraints>
                                 <state key="normal" title="Add Description">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -538,6 +557,7 @@
                             <constraint firstAttribute="bottom" secondItem="Cet-qn-FHY" secondAttribute="bottom" constant="20" symbolic="YES" id="4kW-Wu-uHa"/>
                             <constraint firstItem="iTE-rf-i13" firstAttribute="leading" secondItem="c7v-tg-F7g" secondAttribute="leading" constant="20" symbolic="YES" id="5VQ-45-TDv"/>
                             <constraint firstAttribute="trailing" secondItem="fI4-Bx-aHn" secondAttribute="trailing" constant="20" symbolic="YES" id="8If-zn-dkq"/>
+                            <constraint firstItem="rXc-WH-8Yw" firstAttribute="centerY" secondItem="2Zm-sO-MPk" secondAttribute="centerY" id="8oY-zd-BpR"/>
                             <constraint firstItem="XVo-Ob-Tzu" firstAttribute="trailing" secondItem="2Zm-sO-MPk" secondAttribute="trailing" id="9pq-fm-99i"/>
                             <constraint firstItem="iTE-rf-i13" firstAttribute="trailing" secondItem="XVo-Ob-Tzu" secondAttribute="trailing" id="AV6-6j-PBL"/>
                             <constraint firstItem="99a-0f-4u6" firstAttribute="top" secondItem="nA3-c6-J1T" secondAttribute="bottom" constant="8" symbolic="YES" id="Awo-ye-PE8"/>
@@ -555,6 +575,7 @@
                             <constraint firstItem="2Zm-sO-MPk" firstAttribute="leading" secondItem="rXc-WH-8Yw" secondAttribute="trailing" constant="40" id="Ulf-sJ-ZVA"/>
                             <constraint firstItem="Iht-1a-ubk" firstAttribute="top" secondItem="JI2-Mt-TQf" secondAttribute="bottom" constant="6" id="WKz-Ew-KdJ"/>
                             <constraint firstItem="XVo-Ob-Tzu" firstAttribute="leading" secondItem="6Eq-mj-52g" secondAttribute="trailing" constant="8" symbolic="YES" id="Wwk-y0-TCK"/>
+                            <constraint firstItem="rXc-WH-8Yw" firstAttribute="bottom" secondItem="2Zm-sO-MPk" secondAttribute="bottom" id="XPR-rh-Jmb"/>
                             <constraint firstItem="99a-0f-4u6" firstAttribute="leading" secondItem="nA3-c6-J1T" secondAttribute="leading" id="ZDc-gM-6W2"/>
                             <constraint firstItem="XVo-Ob-Tzu" firstAttribute="leading" secondItem="fI4-Bx-aHn" secondAttribute="leading" id="a11-TS-1Ra"/>
                             <constraint firstItem="fI4-Bx-aHn" firstAttribute="leading" secondItem="rHc-hg-0CD" secondAttribute="trailing" constant="8" symbolic="YES" id="bbK-In-nM1"/>
