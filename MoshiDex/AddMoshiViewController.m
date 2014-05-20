@@ -67,11 +67,10 @@
 
 - (IBAction)submitMoshi:(id)sender {
    
-    if (([nameText.text isEqualToString:@""]) || (imageView.image == nil))   {
+    if ((([nameText.text isEqualToString:@""]) || (imageView.image == nil)) || ((([nameText.text isEqualToString:@""]) || (imageView.image == nil)) && (adminButtonVar == YES))) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You must add both a picture and Moshling name to Submit" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil,nil];
         [alert show];
-    }
-    if (adminButtonVar == YES) {
+    }else if (adminButtonVar == YES) {
         [self startAnimate];
         [self.enterAdminDelegate changeSubmitVar:YES];
         
@@ -179,7 +178,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
-    chosenImage = info[UIImagePickerControllerEditedImage];
+    chosenImage = info[UIImagePickerControllerOriginalImage];
     imageView.image = chosenImage;
     
     [picker dismissViewControllerAnimated:YES completion:NULL];

@@ -264,7 +264,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
         return [[collation sectionTitles] count];
-        NSLog(@"titlecount %d",[[collation sectionTitles] count]);
+        NSLog(@"titlecount %lu",(unsigned long)[[collation sectionTitles] count]);
     }
     return 1;
 }
@@ -300,12 +300,12 @@
                 cell.imageView.image = picture;
                 
                 //to same-size cell pics (pics may be distorted with this method)
-                //                CGSize itemSize = CGSizeMake(50, 40);
-                //                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                //                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                //                [cell.imageView.image drawInRect:imageRect];
-                //                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                //                UIGraphicsEndImageContext();
+                CGSize itemSize = CGSizeMake(50, 40);
+                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+                [cell.imageView.image drawInRect:imageRect];
+                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
                 
                 cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
@@ -315,7 +315,7 @@
                 }
             }
         }];
-
+        
     } else
     
     if (moshiArray) {

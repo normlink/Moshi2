@@ -126,7 +126,7 @@
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
-    chosenImage = info[UIImagePickerControllerEditedImage];
+    chosenImage = info[UIImagePickerControllerOriginalImage];
     imageView.image = chosenImage;
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
