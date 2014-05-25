@@ -38,6 +38,7 @@
                                 <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search Name" showsCancelButton="YES" id="xsz-Sk-ih9">
                                     <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <color key="tintColor" red="1" green="0.95354213480000005" blue="0.56759294709999997" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="barTintColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>

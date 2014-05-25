@@ -18,6 +18,10 @@
     NSMutableArray *moshiArray;
     NSMutableArray *sections;
     NSArray *searchResults;
+    NSArray *unapprovedArray;
+    NSMutableArray *adminSections;
+    NSMutableArray *adminTitles;
+    NSMutableArray *tArray;
     int enterAdmin;
     int incrementCheck;
     BOOL editMode;
@@ -47,6 +51,8 @@
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMoshi)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
+//    [[UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor yellowColor]];
     
     activityInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityInd.center = self.view.center;
@@ -136,6 +142,13 @@
             moshiArray = [[NSMutableArray alloc] initWithArray:objects];
             NSLog(@"arraycount %lu",(unsigned long)moshiArray.count );
             [self partitionObjects:moshiArray];
+            [self getUnapprovedArray:moshiArray];
+            
+//            add unapprovedArray and title to arrays for Admin mode indexing:
+            adminSections = [[NSMutableArray alloc] initWithArray:sections];
+            [adminSections insertObject:unapprovedArray atIndex:0];
+            adminTitles = [[NSMutableArray alloc] initWithArray:[collation sectionTitles]];
+            [adminTitles insertObject:@"UNAPPROVED" atIndex:0];
         }
         [self reloadData];
     }];
@@ -178,6 +191,22 @@
         default:
             break;
     }
+}
+-(NSArray*)getUnapprovedArray:(NSMutableArray*)array{
+    tArray = [[NSMutableArray alloc] init];
+    for (PFObject *object in array) {
+        if ([object[@"MoshiApproved"] isEqual:@NO]) {
+            [tArray addObject:object];
+        }
+    }
+//    unapprovedArray = [[NSArray alloc] init];
+    NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"MoshiName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSArray *sortDescriptors = @[sorter];
+    NSArray *sortedArray = [tArray sortedArrayUsingDescriptors:sortDescriptors];
+//    [unapprovedArray arrayByAddingObjectsFromArray:sortedArray];
+    unapprovedArray = [[NSArray alloc] initWithArray:sortedArray];
+
+    return unapprovedArray;
 }
 - (NSMutableArray *)partitionObjects:(NSMutableArray *)array
 {
@@ -233,9 +262,15 @@
 
 #pragma mark UITableView Delegate
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if ([[sections objectAtIndex:section] count] > 0) {
-        if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
+    
+    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
+        if ([[sections objectAtIndex:section] count] > 0) {
             return [[collation sectionTitles] objectAtIndex:section];
+        }
+    }
+    else if ((editMode == YES) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
+        if ([[adminSections objectAtIndex:section] count] > 0) {
+            return [adminTitles objectAtIndex:section];
         }
     }
     return nil;
@@ -258,6 +293,13 @@
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
     if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
         return [collation sectionIndexTitles];
+//     for Admin indexing:
+    }else
+        if ((editMode == YES) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
+            NSMutableArray *tempAdM = [[NSMutableArray alloc] initWithArray:[collation sectionIndexTitles]];
+            [tempAdM insertObject:@"*UN" atIndex:0];
+            NSArray *forAdmin = [NSArray arrayWithArray:tempAdM];
+            return forAdmin;
     }
     return nil;
 }
@@ -265,6 +307,8 @@
     if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
         return [[collation sectionTitles] count];
         NSLog(@"titlecount %lu",(unsigned long)[[collation sectionTitles] count]);
+    }else if ((editMode == YES) && (segmentController.selectedSegmentIndex == 0) && !(tableView == self.searchDisplayController.searchResultsTableView)){
+        return [adminTitles count];
     }
     return 1;
 }
@@ -273,9 +317,10 @@
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         return [searchResults count];
         
-    }else
-    if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
+    }else if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
         return [[sections objectAtIndex:section] count];
+    }else if ((editMode == YES) && (segmentController.selectedSegmentIndex == 0)) {
+        return [[adminSections objectAtIndex:section] count];
     }
     return moshiArray.count;
 }
@@ -316,11 +361,9 @@
             }
         }];
         
-    } else
-    
-    if (moshiArray) {
+    }else if (moshiArray) {
         if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
-          PFObject* cellObject = [[sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+            PFObject* cellObject = [[sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
             PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
             [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                 if (!error) {
@@ -345,37 +388,64 @@
                     }
                 }
             }];
-
-        }else{
-            PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
-    
-        
-        PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
-        [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-            if (!error) {
+        }else if (moshiArray) {
+            if ((editMode == YES) && (segmentController.selectedSegmentIndex == 0)) {
+                PFObject* cellObject = [[adminSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+                PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+                [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                    if (!error) {
+                        
+                        UIImage *picture = [UIImage imageWithData:data];
+                        
+                        cell.imageView.image = picture;
+                        
+                        //to same-size cell pics (pics may be distorted with this method)
+                        CGSize itemSize = CGSizeMake(50, 40);
+                        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+                        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+                        [cell.imageView.image drawInRect:imageRect];
+                        cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+                        UIGraphicsEndImageContext();
+                        
+                        cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
+                        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
+                        if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
+                            [cell.textLabel setHighlighted:YES];
+                            [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
+                        }
+                    }
+                }];
                 
-                UIImage *picture = [UIImage imageWithData:data];
+            }else{
+                PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
                 
-                cell.imageView.image = picture;
                 
-                //to same-size cell pics (pics may be distorted with this method)
-                CGSize itemSize = CGSizeMake(50, 40);
-                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                [cell.imageView.image drawInRect:imageRect];
-                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-        
-                cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
-                if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
-                    [cell.textLabel setHighlighted:YES];
-                    [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
-                }
+                PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+                [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                    if (!error) {
+                        
+                        UIImage *picture = [UIImage imageWithData:data];
+                        
+                        cell.imageView.image = picture;
+                        
+                        //to same-size cell pics (pics may be distorted with this method)
+                        CGSize itemSize = CGSizeMake(50, 40);
+                        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+                        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+                        [cell.imageView.image drawInRect:imageRect];
+                        cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+                        UIGraphicsEndImageContext();
+                        
+                        cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
+                        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
+                        if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
+                            [cell.textLabel setHighlighted:YES];
+                            [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
+                        }
+                    }
+                }];
             }
-        }];
-        } }else {
-        cell.textLabel.text = @"Loading...";
+        }
     }
     return cell;
 }
