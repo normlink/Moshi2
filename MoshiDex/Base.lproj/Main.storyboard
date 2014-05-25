@@ -32,7 +32,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="r9s-XF-1im">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search Name" showsCancelButton="YES" id="xsz-Sk-ih9">
@@ -54,7 +54,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="r9s-XF-1im" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="5mM-6C-1Bt"/>
-                            <constraint firstAttribute="bottom" secondItem="r9s-XF-1im" secondAttribute="bottom" constant="-88" id="6nj-4a-ZcS"/>
+                            <constraint firstAttribute="bottom" secondItem="r9s-XF-1im" secondAttribute="bottom" id="6nj-4a-ZcS"/>
                             <constraint firstAttribute="trailing" secondItem="r9s-XF-1im" secondAttribute="trailing" id="NXF-Db-xeS"/>
                             <constraint firstItem="r9s-XF-1im" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="zgr-7a-qXR"/>
                         </constraints>

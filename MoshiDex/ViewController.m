@@ -415,36 +415,36 @@
                         }
                     }
                 }];
-                
-            }else{
-                PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
-                
-                
-                PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
-                [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                    if (!error) {
-                        
-                        UIImage *picture = [UIImage imageWithData:data];
-                        
-                        cell.imageView.image = picture;
-                        
-                        //to same-size cell pics (pics may be distorted with this method)
-                        CGSize itemSize = CGSizeMake(50, 40);
-                        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                        [cell.imageView.image drawInRect:imageRect];
-                        cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                        UIGraphicsEndImageContext();
-                        
-                        cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
-                        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
-                        if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
-                            [cell.textLabel setHighlighted:YES];
-                            [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
-                        }
+            
+        }else{
+            PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
+            
+            
+            PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+            [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                if (!error) {
+                    
+                    UIImage *picture = [UIImage imageWithData:data];
+                    
+                    cell.imageView.image = picture;
+                    
+                    //to same-size cell pics (pics may be distorted with this method)
+                    CGSize itemSize = CGSizeMake(50, 40);
+                    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+                    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+                    [cell.imageView.image drawInRect:imageRect];
+                    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+                    UIGraphicsEndImageContext();
+                    
+                    cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
+                    if ([[cellObject objectForKey:@"MoshiApproved"]  isEqual: @NO]) {
+                        [cell.textLabel setHighlighted:YES];
+                        [cell.textLabel setHighlightedTextColor:[UIColor redColor]];
                     }
-                }];
-            }
+                }
+            }];
+        }
         }
     }
     return cell;
@@ -504,7 +504,8 @@
 //            indexPath = [moshiTableView indexPathForSelectedRow];
             AdminViewController *detailsVC = segue.destinationViewController;
             detailsVC.adminDelegate = self;
-            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+//            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+            detailsVC.detailInfo = [[adminSections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
         }
     }
 }
