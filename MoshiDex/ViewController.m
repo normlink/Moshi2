@@ -493,21 +493,47 @@
         addVC.adminButtonVar = editMode;
     }
     if ([segue.identifier isEqualToString:@"toAdminVC"]) {
-//        NSIndexPath *indexPath = nil;
-        
-        if (self.searchDisplayController.active) {
-//            indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
-            AdminViewController *detailsVC = segue.destinationViewController;
-            detailsVC.adminDelegate = self;
-            detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+        //       NSIndexPath *indexPath = nil;
+        if (segmentController.selectedSegmentIndex == 0) {
+            if (self.searchDisplayController.active) {
+                //                NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+                AdminViewController *detailsVC = segue.destinationViewController;
+                detailsVC.adminDelegate = self;
+                detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+            }else{
+                AdminViewController *detailsVC = segue.destinationViewController;
+                detailsVC.adminDelegate = self;
+                detailsVC.detailInfo = [[adminSections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
+            }
         }else{
-//            indexPath = [moshiTableView indexPathForSelectedRow];
-            AdminViewController *detailsVC = segue.destinationViewController;
-            detailsVC.adminDelegate = self;
-//            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
-            detailsVC.detailInfo = [[adminSections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
+            if (self.searchDisplayController.active) {
+                AdminViewController *detailsVC = segue.destinationViewController;
+                detailsVC.adminDelegate = self;
+                detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+            }else{
+                AdminViewController *detailsVC = segue.destinationViewController;
+                detailsVC.adminDelegate = self;
+                detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+            }
         }
     }
+
+//    if ([segue.identifier isEqualToString:@"toAdminVC"]) {
+////        NSIndexPath *indexPath = nil;
+//        
+//        if (self.searchDisplayController.active) {
+////            indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
+//            AdminViewController *detailsVC = segue.destinationViewController;
+//            detailsVC.adminDelegate = self;
+//            detailsVC.detailInfo = [searchResults objectAtIndex:_indexSelected];
+//        }else{
+////            indexPath = [moshiTableView indexPathForSelectedRow];
+//            AdminViewController *detailsVC = segue.destinationViewController;
+//            detailsVC.adminDelegate = self;
+////            detailsVC.detailInfo = [moshiArray objectAtIndex:_indexSelected];
+//            detailsVC.detailInfo = [[adminSections objectAtIndex:_indexSection] objectAtIndex:_indexSelected];
+//        }
+//    }
 }
 
 
