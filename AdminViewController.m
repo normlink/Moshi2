@@ -24,6 +24,7 @@
     __weak IBOutlet UIButton *editDescriptionButton;
     
     UIImage *chosenImage;
+    UIImage *iconImage;
     UIActivityIndicatorView *activityInd;
 }
 - (IBAction)editApprove:(id)sender;
@@ -107,6 +108,18 @@
         NSData *photo = UIImagePNGRepresentation(chosenImage);
         PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
         [mobject setObject:imageFile forKey:@"MoshiPicture"];
+        
+        iconImage = chosenImage;
+        CGSize itemSize = CGSizeMake(50, 40);
+        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+        [iconImage drawInRect:imageRect];
+        iconImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSData *iconPhoto = UIImageJPEGRepresentation(iconImage, 0.5);
+        PFFile *iconImageFile = [PFFile fileWithName:@"ICON.png" data:iconPhoto];
+        [mobject setObject:iconImageFile forKey:@"MoshiIcon"];
         
         [mobject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {

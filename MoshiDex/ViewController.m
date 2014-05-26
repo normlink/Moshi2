@@ -331,12 +331,14 @@
     
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cellIdentifer"];
+//        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+
     }
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         PFObject* cellObject = [searchResults objectAtIndex:indexPath.row];
         
         
-        PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+        PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiIcon"];
         [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
             if (!error) {
                 
@@ -345,12 +347,12 @@
                 cell.imageView.image = picture;
                 
                 //to same-size cell pics (pics may be distorted with this method)
-                CGSize itemSize = CGSizeMake(50, 40);
-                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                [cell.imageView.image drawInRect:imageRect];
-                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
+//                CGSize itemSize = CGSizeMake(50, 40);
+//                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+//                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+//                [cell.imageView.image drawInRect:imageRect];
+//                cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+//                UIGraphicsEndImageContext();
                 
                 cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
@@ -364,7 +366,7 @@
     }else if (moshiArray) {
         if ((editMode == NO) && (segmentController.selectedSegmentIndex == 0)) {
             PFObject* cellObject = [[sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-            PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+            PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiIcon"];
             [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                 if (!error) {
                     
@@ -372,13 +374,14 @@
                     
                     cell.imageView.image = picture;
                     
+                    
                     //to same-size cell pics (pics may be distorted with this method)
-                    CGSize itemSize = CGSizeMake(50, 40);
-                    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                    [cell.imageView.image drawInRect:imageRect];
-                    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                    UIGraphicsEndImageContext();
+//                    CGSize itemSize = CGSizeMake(50, 40);
+//                    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+//                    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+//                    [cell.imageView.image drawInRect:imageRect];
+//                    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+//                    UIGraphicsEndImageContext();
                     
                     cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
@@ -391,7 +394,7 @@
         }else if (moshiArray) {
             if ((editMode == YES) && (segmentController.selectedSegmentIndex == 0)) {
                 PFObject* cellObject = [[adminSections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-                PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+                PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiIcon"];
                 [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                     if (!error) {
                         
@@ -400,12 +403,12 @@
                         cell.imageView.image = picture;
                         
                         //to same-size cell pics (pics may be distorted with this method)
-                        CGSize itemSize = CGSizeMake(50, 40);
-                        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                        [cell.imageView.image drawInRect:imageRect];
-                        cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                        UIGraphicsEndImageContext();
+//                        CGSize itemSize = CGSizeMake(50, 40);
+//                        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+//                        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+//                        [cell.imageView.image drawInRect:imageRect];
+//                        cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+//                        UIGraphicsEndImageContext();
                         
                         cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];
@@ -420,7 +423,7 @@
             PFObject* cellObject = [moshiArray objectAtIndex:indexPath.row];
             
             
-            PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiPicture"];
+            PFFile *pic = (PFFile*)[cellObject objectForKey:@"MoshiIcon"];
             [pic getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                 if (!error) {
                     
@@ -428,13 +431,14 @@
                     
                     cell.imageView.image = picture;
                     
+                    
                     //to same-size cell pics (pics may be distorted with this method)
-                    CGSize itemSize = CGSizeMake(50, 40);
-                    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-                    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-                    [cell.imageView.image drawInRect:imageRect];
-                    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-                    UIGraphicsEndImageContext();
+//                    CGSize itemSize = CGSizeMake(50, 40);
+//                    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+//                    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+//                    [cell.imageView.image drawInRect:imageRect];
+//                    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+//                    UIGraphicsEndImageContext();
                     
                     cell.textLabel.text = [cellObject objectForKey:@"MoshiName"];
                     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [cellObject objectForKey:@"MoshiNumber"]];

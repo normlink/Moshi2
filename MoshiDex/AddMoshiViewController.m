@@ -13,6 +13,7 @@
     UIImagePickerController *myPicker;
     __weak IBOutlet UIImageView *imageView;
     UIImage *chosenImage;
+    UIImage *iconImage;
     UIActivityIndicatorView *activityInd;
     __weak IBOutlet UITextField *nameText;
     __weak IBOutlet UITextField *numberText;
@@ -90,6 +91,18 @@
         PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
         [mobject setObject:imageFile forKey:@"MoshiPicture"];
         
+        iconImage = chosenImage;
+        CGSize itemSize = CGSizeMake(50, 40);
+        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+        [iconImage drawInRect:imageRect];
+        iconImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSData *iconPhoto = UIImageJPEGRepresentation(iconImage, 0.5);
+        PFFile *iconImageFile = [PFFile fileWithName:@"ICON.png" data:iconPhoto];
+        [mobject setObject:iconImageFile forKey:@"MoshiIcon"];
+        
         [mobject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [self finishAnimate];
@@ -117,6 +130,18 @@
         NSData *photo = UIImagePNGRepresentation(chosenImage);
         PFFile *imageFile = [PFFile fileWithName:@"MM.png" data:photo];
         [mobject setObject:imageFile forKey:@"MoshiPicture"];
+        
+        iconImage = chosenImage;
+        CGSize itemSize = CGSizeMake(50, 40);
+        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+        [iconImage drawInRect:imageRect];
+        iconImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSData *iconPhoto = UIImageJPEGRepresentation(iconImage, 0.5);
+        PFFile *iconImageFile = [PFFile fileWithName:@"ICON.png" data:iconPhoto];
+        [mobject setObject:iconImageFile forKey:@"MoshiIcon"];
         
         [mobject saveInBackground];
         
@@ -188,6 +213,7 @@
     [picker dismissViewControllerAnimated:YES completion:NULL];
     
 }
+
 - (void)startAnimate {
     [self.view setUserInteractionEnabled:NO];
     [activityInd setHidden:NO];
